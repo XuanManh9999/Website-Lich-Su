@@ -97,7 +97,7 @@ router.post('/chat', async (req, res) => {
     context += 'Hãy trả lời câu hỏi dựa trên thông tin từ cơ sở dữ liệu và kiến thức của bạn. Nếu thông tin từ cơ sở dữ liệu có liên quan, hãy tham khảo và sử dụng nó.';
 
     // Get Gemini model
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     // Generate response
     const result = await model.generateContent(context);
@@ -112,7 +112,8 @@ router.post('/chat', async (req, res) => {
     console.error('Chatbot error:', error);
     
     // Fallback response if Gemini fails
-    const dbResults = await queryDatabase(message);
+    const { message } = req.body;
+    const dbResults = await queryDatabase(message || '');
     let fallbackResponse = 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. ';
 
     if (dbResults.length > 0) {
