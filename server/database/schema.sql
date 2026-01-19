@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_address TEXT,
     total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     status VARCHAR(50) DEFAULT 'pending', -- pending, paid, cancelled, refunded
+    payment_status VARCHAR(50) DEFAULT 'unpaid', -- unpaid, paid, failed
     payment_method VARCHAR(50) DEFAULT 'vnpay',
     vnpay_transaction_id VARCHAR(255),
     vnpay_response_code VARCHAR(10),
@@ -134,6 +135,26 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     INDEX idx_order_id (order_id),
     INDEX idx_product_id (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- Bảng payments (lưu thông tin giao dịch thanh toán)
+-- ============================================
+CREATE TABLE IF NOT EXISTS payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    transaction_id VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending', -- pending, success, failed
+    vnpay_transaction_no VARCHAR(255),
+    vnpay_response_code VARCHAR(10),
+    payment_date TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    INDEX idx_order_id (order_id),
+    INDEX idx_transaction_id (transaction_id),
+    INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
