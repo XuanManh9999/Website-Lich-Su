@@ -3,6 +3,7 @@ import { carouselAPI } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
 import Toast from '../../components/Toast';
+import { fileToBase64, validateImage } from '../../utils/fileUtils';
 
 const AdminCarousel = () => {
   const [slides, setSlides] = useState([]);
@@ -17,7 +18,7 @@ const AdminCarousel = () => {
     author: 'Thiên Sử Ký',
     display_order: 0,
     is_active: true,
-    image: null,
+    image_url: '',
   });
   const itemsPerPage = 10;
 
@@ -77,9 +78,28 @@ const AdminCarousel = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+  // Handle image upload and convert to base64
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validation = validateImage(file, 5);
+    if (!validation.valid) {
+      showToast(validation.error, 'error');
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      showToast('Đang upload ảnh...', 'info');
+      const base64 = await fileToBase64(file);
+      setFormData({ ...formData, image_url: base64 });
+      showToast('Upload ảnh thành công!', 'success');
+    } catch (error) {
+      console.error('Error converting image:', error);
+      showToast('Lỗi khi upload ảnh!', 'error');
+      e.target.value = '';
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -106,7 +126,7 @@ const AdminCarousel = () => {
       author: slide.author || 'Thiên Sử Ký',
       display_order: slide.display_order || 0,
       is_active: slide.is_active !== undefined ? slide.is_active : true,
-      image: null, // Không set file vì không thể set file input từ state
+      image_url: slide.image_url || '',
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -133,7 +153,7 @@ const AdminCarousel = () => {
       author: 'Thiên Sử Ký',
       display_order: 0,
       is_active: true,
-      image: null,
+      image_url: '',
     });
     setEditingSlide(null);
     setShowForm(false);
@@ -164,7 +184,7 @@ const AdminCarousel = () => {
             alt="Slide"
             className="w-16 h-10 object-cover rounded"
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/64x40/8B0000/FFFFFF?text=Image';
+              e.target.src = 'https://via.placeholder.com/64x40/0F4C81/FFFFFF?text=Image';
             }}
           />
         );
@@ -195,14 +215,14 @@ const AdminCarousel = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-history-red">Quản Trị Carousel</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">Quản Trị Carousel</h1>
           <button
             onClick={() => {
               resetForm();
               setShowForm(true);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
           >
             + Tạo Slide Mới
           </button>
@@ -218,7 +238,7 @@ const AdminCarousel = () => {
 
         {showForm && (
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6">
-            <h2 className="text-2xl font-bold text-history-red mb-6">
+            <h2 className="text-2xl font-bold text-primary mb-6">
               {editingSlide ? 'Chỉnh Sửa Slide' : 'Tạo Slide Mới'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -232,7 +252,7 @@ const AdminCarousel = () => {
                   onChange={handleInputChange}
                   required
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                   placeholder="Nhập câu quote..."
                 />
               </div>
@@ -246,36 +266,47 @@ const AdminCarousel = () => {
                   name="author"
                   value={formData.author}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                   placeholder="Nhập tên tác giả..."
                 />
               </div>
 
+              {/* Image Upload */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Ảnh slide {!editingSlide && <span className="text-red-500">*</span>}
                 </label>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  required={!editingSlide}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
-                />
-                {editingSlide && editingSlide.image_url && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-600 mb-2">Ảnh hiện tại:</p>
-                    <img
-                      src={editingSlide.image_url.startsWith('http') ? editingSlide.image_url : `http://localhost:5000${editingSlide.image_url}`}
-                      alt="Current"
-                      className="w-32 h-20 object-cover rounded"
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/128x80/8B0000/FFFFFF?text=Image';
-                      }}
-                    />
-                  </div>
-                )}
+                <div className="flex flex-col gap-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    required={!editingSlide && !formData.image_url}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-light"
+                  />
+                  {formData.image_url && (
+                    <div className="relative w-full max-w-2xl">
+                      <img
+                        src={formData.image_url}
+                        alt="Preview"
+                        className="w-full h-64 object-cover rounded-lg shadow-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image_url: '' })}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg"
+                        title="Xóa ảnh"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    💡 Tip: Upload ảnh slide tự động chuyển sang base64. Tối đa 5MB. Kích thước khuyến nghị: 1920x800px.
+                  </p>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -300,7 +331,7 @@ const AdminCarousel = () => {
                     checked={formData.is_active}
                     onChange={handleInputChange}
                     id="is_active"
-                    className="w-5 h-5 text-history-red border-gray-300 rounded focus:ring-history-red"
+                    className="w-5 h-5 text-primary border-gray-300 rounded focus:ring-history-red"
                   />
                   <label htmlFor="is_active" className="text-sm font-semibold text-gray-700">
                     Kích hoạt slide
@@ -308,19 +339,19 @@ const AdminCarousel = () => {
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-4 border-t">
                 <button
                   type="submit"
-                  className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+                  className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
                 >
-                  {editingSlide ? 'Cập Nhật' : 'Tạo Mới'}
+                  {editingSlide ? '✅ Cập Nhật' : '➕ Tạo Mới'}
                 </button>
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
+                  className="bg-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
                 >
-                  Hủy
+                  ❌ Hủy
                 </button>
               </div>
             </form>

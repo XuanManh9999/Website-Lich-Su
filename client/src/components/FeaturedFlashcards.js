@@ -82,7 +82,7 @@ const FeaturedFlashcards = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-3 md:mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-3 md:mb-4">
             Flash Card học lịch sử
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -93,7 +93,7 @@ const FeaturedFlashcards = () => {
         {/* Flashcards List */}
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
           </div>
         ) : flashcards.length === 0 ? (
@@ -142,9 +142,9 @@ const FeaturedFlashcards = () => {
                       {/* Stats */}
                       <div className="flex gap-3 md:flex-col md:gap-3 w-full md:w-auto">
                         {/* Cards Count */}
-                        <div className="bg-pink-100 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
+                        <div className="bg-blue-100 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
                           <svg
-                            className="w-6 h-6 text-history-red mb-1 md:mb-0"
+                            className="w-6 h-6 text-primary mb-1 md:mb-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -157,7 +157,7 @@ const FeaturedFlashcards = () => {
                             />
                           </svg>
                           <div className="text-center md:text-left">
-                            <div className="text-xl md:text-2xl font-bold text-history-red">
+                            <div className="text-xl md:text-2xl font-bold text-primary">
                               {flashcard.cardsCount}
                             </div>
                             <div className="text-xs md:text-sm text-gray-600">Thẻ học</div>
@@ -165,9 +165,9 @@ const FeaturedFlashcards = () => {
                         </div>
 
                         {/* Study Time */}
-                        <div className="bg-pink-100 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
+                        <div className="bg-blue-100 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
                           <svg
-                            className="w-6 h-6 text-history-red mb-1 md:mb-0"
+                            className="w-6 h-6 text-primary mb-1 md:mb-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -180,7 +180,7 @@ const FeaturedFlashcards = () => {
                             />
                           </svg>
                           <div className="text-center md:text-left">
-                            <div className="text-xl md:text-2xl font-bold text-history-red">
+                            <div className="text-xl md:text-2xl font-bold text-primary">
                               {flashcard.studyTime}
                             </div>
                             <div className="text-xs md:text-sm text-gray-600">Thời gian học</div>
@@ -198,7 +198,7 @@ const FeaturedFlashcards = () => {
                       {/* Start Button */}
                       <button
                         onClick={() => handleStartLearning(flashcard.slug)}
-                        className="w-full md:w-auto bg-history-red text-white px-6 md:px-8 py-3 rounded-lg font-semibold text-base md:text-lg hover:bg-history-red-light transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                        className="w-full md:w-auto bg-primary text-white px-6 md:px-8 py-3 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                       >
                         <svg
                           className="w-5 h-5 fill-current"
@@ -218,7 +218,7 @@ const FeaturedFlashcards = () => {
             <div className="text-center">
               <Link
                 to="/quiz"
-                className="inline-block bg-history-red text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-history-red-light transition-colors shadow-md hover:shadow-lg"
+                className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
               >
                 Xem tất cả bộ flashcard
               </Link>

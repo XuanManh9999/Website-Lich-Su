@@ -62,7 +62,7 @@ const ResetPassword = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-history-red mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
               Đặt lại mật khẩu thành công!
             </h1>
             <p className="text-gray-600 mb-6">
@@ -70,7 +70,7 @@ const ResetPassword = () => {
             </p>
             <Link
               to="/admin/login"
-              className="inline-block bg-history-red text-white py-3 px-6 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+              className="inline-block bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-light transition-colors"
             >
               Đăng nhập ngay
             </Link>
@@ -83,13 +83,13 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 md:p-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-history-red text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
           Đặt Lại Mật Khẩu
         </h1>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-blue-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -128,13 +128,13 @@ const ResetPassword = () => {
           <button
             type="submit"
             disabled={loading || !token}
-            className="w-full bg-history-red text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-history-red-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Đang xử lý...' : 'Đặt lại mật khẩu'}
           </button>
 
           <div className="text-center text-sm text-gray-600">
-            <Link to="/admin/login" className="text-history-red font-semibold hover:underline">
+            <Link to="/admin/login" className="text-primary font-semibold hover:underline">
               Quay lại đăng nhập
             </Link>
           </div>

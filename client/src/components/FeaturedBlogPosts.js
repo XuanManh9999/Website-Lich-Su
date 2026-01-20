@@ -54,7 +54,7 @@ const FeaturedBlogPosts = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-3 md:mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-3 md:mb-4">
             Blog lịch sử
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6 md:mb-8">
@@ -67,8 +67,8 @@ const FeaturedBlogPosts = () => {
               onClick={() => setSelectedCategory('Tất cả')}
               className={`px-6 py-2.5 rounded-lg font-semibold text-sm md:text-base transition-all ${
                 selectedCategory === 'Tất cả'
-                  ? 'bg-history-red text-white shadow-md'
-                  : 'bg-pink-100 text-history-red hover:bg-pink-200'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-blue-100 text-primary hover:bg-blue-200'
               }`}
             >
               Tất cả
@@ -77,8 +77,8 @@ const FeaturedBlogPosts = () => {
               onClick={() => setSelectedCategory('Blog')}
               className={`px-6 py-2.5 rounded-lg font-semibold text-sm md:text-base transition-all ${
                 selectedCategory === 'Blog'
-                  ? 'bg-history-red text-white shadow-md'
-                  : 'bg-pink-100 text-history-red hover:bg-pink-200'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-blue-100 text-primary hover:bg-blue-200'
               }`}
             >
               Blog
@@ -89,7 +89,7 @@ const FeaturedBlogPosts = () => {
         {/* Blog Posts Grid */}
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
           </div>
         ) : posts.length === 0 ? (
@@ -109,15 +109,15 @@ const FeaturedBlogPosts = () => {
                   <div className="relative h-48 sm:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                     {post.image_url ? (
                       <img
-                        src={post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`}
+                        src={post.image_url.startsWith('data:') || post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`}
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Blog';
+                          e.target.src = 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-history-red/10">
+                      <div className="w-full h-full flex items-center justify-center bg-primary/10">
                         <span className="text-4xl">📝</span>
                       </div>
                     )}
@@ -127,7 +127,7 @@ const FeaturedBlogPosts = () => {
                   <div className="p-5 md:p-6 flex flex-col gap-3">
                     {/* Metadata Bar: Tag (left) and Reading Time (right) */}
                     <div className="flex items-center justify-between text-xs md:text-sm">
-                      <span className="bg-history-red text-white px-2.5 py-1 rounded font-semibold text-xs">
+                      <span className="bg-primary text-white px-2.5 py-1 rounded font-semibold text-xs">
                         Blog
                       </span>
                       <span className="text-gray-600">{(() => {
@@ -139,7 +139,7 @@ const FeaturedBlogPosts = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-history-red line-clamp-2 group-hover:text-history-red-light transition-colors">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary line-clamp-2 group-hover:text-primary-light transition-colors">
                       {post.title}
                     </h3>
 
@@ -180,7 +180,7 @@ const FeaturedBlogPosts = () => {
                     </div>
 
                     {/* Read More */}
-                    <div className="flex items-center text-history-red font-semibold text-sm sm:text-base mt-2 group-hover:gap-2 gap-1 transition-all">
+                    <div className="flex items-center text-primary font-semibold text-sm sm:text-base mt-2 group-hover:gap-2 gap-1 transition-all">
                       Đọc tiếp
                       <span className="transition-transform duration-200 group-hover:translate-x-1">
                         →
@@ -195,7 +195,7 @@ const FeaturedBlogPosts = () => {
             <div className="text-center">
               <Link
                 to="/blog"
-                className="inline-block bg-history-red text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-history-red-light transition-colors shadow-md hover:shadow-lg"
+                className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
               >
                 Xem tất cả bài viết
               </Link>

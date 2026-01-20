@@ -3,6 +3,7 @@ import { productAPI } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
 import Toast from '../../components/Toast';
+import { fileToBase64, validateImage, generateSlug } from '../../utils/fileUtils';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -73,6 +74,30 @@ const AdminProducts = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  // Handle image upload and convert to base64
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validation = validateImage(file, 5);
+    if (!validation.valid) {
+      showToast(validation.error, 'error');
+      e.target.value = ''; // Reset input
+      return;
+    }
+
+    try {
+      showToast('Đang upload ảnh...', 'info');
+      const base64 = await fileToBase64(file);
+      setFormData({ ...formData, image_url: base64 });
+      showToast('Upload ảnh thành công!', 'success');
+    } catch (error) {
+      console.error('Error converting image:', error);
+      showToast('Lỗi khi upload ảnh!', 'error');
+      e.target.value = ''; // Reset input
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -171,13 +196,13 @@ const AdminProducts = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-history-red">Quản Trị Sản Phẩm</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">Quản Trị Sản Phẩm</h1>
           <button
             onClick={() => {
               resetForm();
               setShowForm(!showForm);
             }}
-            className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
           >
             {showForm ? 'Đóng Form' : 'Thêm Sản Phẩm Mới'}
           </button>
@@ -193,7 +218,7 @@ const AdminProducts = () => {
 
         {showForm && (
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-history-red mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-6">
               {editingProduct ? 'Chỉnh Sửa' : 'Thêm Mới'} Sản Phẩm
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -208,7 +233,7 @@ const AdminProducts = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                   />
                 </div>
                 <div>
@@ -222,8 +247,15 @@ const AdminProducts = () => {
                     onChange={handleInputChange}
                     required
                     placeholder="san-pham-moi"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, slug: generateSlug(formData.name) })}
+                    className="mt-2 text-sm text-primary hover:text-primary-light font-medium"
+                  >
+                    🔄 Tự động tạo từ tên sản phẩm
+                  </button>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -240,21 +272,45 @@ const AdminProducts = () => {
                     min="0"
                     step="1000"
                     placeholder="100000"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    URL ảnh
-                  </label>
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Ảnh sản phẩm
+                </label>
+                <div className="flex flex-col gap-4">
                   <input
-                    type="text"
-                    name="image_url"
-                    value={formData.image_url}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-light"
                   />
+                  {formData.image_url && (
+                    <div className="relative w-full max-w-sm">
+                      <img
+                        src={formData.image_url}
+                        alt="Preview"
+                        className="w-full h-64 object-cover rounded-lg shadow-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image_url: '' })}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg"
+                        title="Xóa ảnh"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    💡 Tip: Upload ảnh trực tiếp (tự động chuyển sang base64). Tối đa 5MB. Định dạng: JPG, PNG, GIF, WEBP.
+                  </p>
                 </div>
               </div>
               <div>
@@ -266,22 +322,22 @@ const AdminProducts = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows="5"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none resize-y"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-y transition-all"
                 />
               </div>
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-4 border-t">
                 <button
                   type="submit"
-                  className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+                  className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
                 >
-                  {editingProduct ? 'Cập Nhật' : 'Tạo Mới'}
+                  {editingProduct ? '✅ Cập Nhật' : '➕ Tạo Mới'}
                 </button>
                 <button
                   type="button"
                   onClick={resetForm}
                   className="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
                 >
-                  Hủy
+                  ❌ Hủy
                 </button>
               </div>
             </form>

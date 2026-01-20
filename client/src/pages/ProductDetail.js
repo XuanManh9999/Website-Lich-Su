@@ -76,7 +76,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
         </div>
       </div>
@@ -90,7 +90,7 @@ const ProductDetail = () => {
           <p className="text-red-600 text-xl mb-4">{error || 'Không tìm thấy sản phẩm'}</p>
           <Link
             to="/san-pham"
-            className="text-history-red hover:underline font-semibold"
+            className="text-primary hover:underline font-semibold"
           >
             Quay lại danh sách sản phẩm
           </Link>
@@ -100,8 +100,10 @@ const ProductDetail = () => {
   }
 
   const imageUrl = product.image_url 
-    ? (product.image_url.startsWith('http') ? product.image_url : `http://localhost:5000${product.image_url}`)
-    : 'https://via.placeholder.com/500x700/8B0000/FFFFFF?text=Product';
+    ? (product.image_url.startsWith('data:') || product.image_url.startsWith('http') 
+        ? product.image_url 
+        : `http://localhost:5000${product.image_url}`)
+    : 'https://via.placeholder.com/500x700/0F4C81/FFFFFF?text=Product';
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12">
@@ -115,7 +117,7 @@ const ProductDetail = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-history-red hover:text-history-red-light transition-colors mb-6"
+          className="flex items-center gap-2 text-primary hover:text-primary-light transition-colors mb-6"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -135,7 +137,7 @@ const ProductDetail = () => {
                     alt={product.name}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/500x700/8B0000/FFFFFF?text=Product';
+                      e.target.src = 'https://via.placeholder.com/500x700/0F4C81/FFFFFF?text=Product';
                     }}
                   />
                 </div>
@@ -145,12 +147,12 @@ const ProductDetail = () => {
             {/* Right: Product Info */}
             <div className="flex flex-col gap-6">
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-history-red">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary">
                 {product.name}
               </h1>
 
               {/* Price */}
-              <div className="text-3xl md:text-4xl font-bold text-history-red">
+              <div className="text-3xl md:text-4xl font-bold text-primary">
                 {product.price 
                   ? new Intl.NumberFormat('vi-VN', {
                       style: 'currency',
@@ -167,7 +169,7 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => handleQuantityChange(-1)}
-                    className="w-10 h-10 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-history-red hover:text-history-red transition-colors font-semibold"
+                    className="w-10 h-10 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-primary hover:text-primary transition-colors font-semibold"
                   >
                     -
                   </button>
@@ -183,7 +185,7 @@ const ProductDetail = () => {
                   />
                   <button
                     onClick={() => handleQuantityChange(1)}
-                    className="w-10 h-10 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-history-red hover:text-history-red transition-colors font-semibold"
+                    className="w-10 h-10 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-primary hover:text-primary transition-colors font-semibold"
                   >
                     +
                   </button>
@@ -193,7 +195,7 @@ const ProductDetail = () => {
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-history-red text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-history-red-light transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                className="w-full bg-primary text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-primary-light transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />

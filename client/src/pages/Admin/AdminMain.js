@@ -45,15 +45,15 @@ const AdminMain = () => {
       <aside
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
-        } bg-history-red text-white transition-all duration-300 flex flex-col`}
+        } bg-primary text-white transition-all duration-300 flex flex-col`}
       >
-        <div className="p-4 border-b border-history-red-light flex items-center justify-between">
+        <div className="p-4 border-b border-primary-light flex items-center justify-between">
           <h1 className={`font-bold text-xl ${sidebarOpen ? 'block' : 'hidden'}`}>
             Admin Panel
           </h1>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-history-red-light rounded transition-colors"
+            className="p-2 hover:bg-primary-light rounded transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -68,8 +68,8 @@ const AdminMain = () => {
               to={item.path}
               className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
                 isActive(item.path)
-                  ? 'bg-white text-history-red font-semibold'
-                  : 'hover:bg-history-red-light'
+                  ? 'bg-white text-primary font-semibold'
+                  : 'hover:bg-primary-light'
               }`}
               title={!sidebarOpen ? item.label : ''}
             >
@@ -79,10 +79,10 @@ const AdminMain = () => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-history-red-light">
+        <div className="p-4 border-t border-primary-light">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-history-red-light transition-colors"
+            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-primary-light transition-colors"
             title={!sidebarOpen ? 'Đăng xuất' : ''}
           >
             <span className="text-xl">🚪</span>

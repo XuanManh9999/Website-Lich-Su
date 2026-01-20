@@ -174,13 +174,13 @@ const AdminAdmins = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-history-red">Quản Trị Quản Trị Viên</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">Quản Trị Quản Trị Viên</h1>
           <button
             onClick={() => {
               resetForm();
               setShowForm(!showForm);
             }}
-            className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
           >
             {showForm ? 'Đóng Form' : 'Thêm Quản Trị Viên Mới'}
           </button>
@@ -196,7 +196,7 @@ const AdminAdmins = () => {
 
         {showForm && (
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-history-red mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-6">
               {editingAdmin ? 'Chỉnh Sửa' : 'Thêm Mới'} Quản Trị Viên
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -274,7 +274,7 @@ const AdminAdmins = () => {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+                  className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
                 >
                   {editingAdmin ? 'Cập Nhật' : 'Tạo Mới'}
                 </button>

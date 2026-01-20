@@ -1,17 +1,17 @@
 #!/bin/bash
 
-echo "=== Stopping Website Lich Su Applications ==="
+echo "=== Dừng Việt Sử Quân ==="
 echo ""
 
 # Stop Server
-echo "Stopping Server..."
+echo "Đang dừng Server..."
 pkill -f "node index.js"
-echo "Server stopped"
+echo "✓ Server đã dừng"
 
 # Stop Client
-echo "Stopping Client..."
+echo "Đang dừng Client..."
 pkill -f "serve.*build"
-echo "Client stopped"
+echo "✓ Client đã dừng"
 
 echo ""
-echo "=== All applications stopped ==="
+echo "✅ Tất cả ứng dụng đã dừng"

@@ -4,7 +4,7 @@ import { quizAPI } from '../services/api';
 
 const QuizDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
@@ -145,7 +145,7 @@ const QuizDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
         </div>
       </div>
@@ -159,7 +159,7 @@ const QuizDetail = () => {
           <p className="text-red-600 text-xl mb-4">Không tìm thấy câu hỏi nào.</p>
           <Link
             to="/quiz"
-            className="text-history-red hover:underline font-semibold"
+            className="text-primary hover:underline font-semibold"
           >
             Quay lại danh sách
           </Link>
@@ -177,7 +177,7 @@ const QuizDetail = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8 md:py-12">
         {/* Red Header */}
-        <div className="bg-history-red text-white py-6 md:py-8 mb-8">
+        <div className="bg-primary text-white py-6 md:py-8 mb-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">Kết quả Quiz</h1>
             <p className="text-lg md:text-xl opacity-90">{quizInfo.title}</p>
@@ -209,13 +209,13 @@ const QuizDetail = () => {
                     fill="none"
                     strokeDasharray={`${2 * Math.PI * 90}`}
                     strokeDashoffset={`${2 * Math.PI * 90 * (1 - percentage / 100)}`}
-                    className="text-history-red transition-all duration-1000"
+                    className="text-primary transition-all duration-1000"
                     strokeLinecap="round"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div>
-                    <div className="text-4xl md:text-5xl font-bold text-history-red">
+                    <div className="text-4xl md:text-5xl font-bold text-primary">
                       {percentage}%
                     </div>
                     <div className="text-sm md:text-base text-gray-600 mt-1">Hoàn thành</div>
@@ -263,7 +263,7 @@ const QuizDetail = () => {
               </Link>
               <button
                 onClick={handleRestart}
-                className="px-6 py-3 bg-history-red text-white rounded-lg font-semibold hover:bg-history-red-light transition-colors flex items-center justify-center gap-2"
+                className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-light transition-colors flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -286,7 +286,7 @@ const QuizDetail = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8 md:py-12">
         {/* Red Header */}
-        <div className="bg-history-red text-white py-6 md:py-8 mb-8">
+        <div className="bg-primary text-white py-6 md:py-8 mb-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Link
               to="/quiz"
@@ -338,7 +338,7 @@ const QuizDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Red Header */}
-      <div className="bg-history-red text-white py-4 md:py-6">
+      <div className="bg-primary text-white py-4 md:py-6">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             to="/quiz"
@@ -384,7 +384,7 @@ const QuizDetail = () => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2 md:h-3">
             <div
-              className="bg-history-red h-full rounded-full transition-all duration-300"
+              className="bg-primary h-full rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -417,10 +417,10 @@ const QuizDetail = () => {
                   onClick={() => handleAnswerSelect(option)}
                   className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${
                     isSelected
-                      ? 'border-history-red bg-red-50 text-history-red font-semibold'
+                      ? 'border-primary bg-blue-50 text-primary font-semibold'
                       : showResult
                       ? 'border-green-500 bg-green-50 text-green-700 font-semibold'
-                      : 'border-gray-300 hover:border-history-red hover:bg-red-50'
+                      : 'border-gray-300 hover:border-primary hover:bg-blue-50'
                   }`}
                 >
                   {option}. {optionText}
@@ -433,7 +433,7 @@ const QuizDetail = () => {
           <div className="mb-8">
             <button
               onClick={handleShowAnswer}
-              className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-history-red-light transition-colors"
+              className="bg-primary text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-primary-light transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -458,7 +458,7 @@ const QuizDetail = () => {
 
           <button
             onClick={handleShowAnswer}
-            className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-history-red-light transition-colors"
+            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-primary-light transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

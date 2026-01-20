@@ -68,15 +68,15 @@ const ImageCarousel = () => {
           <img
             src={
               slides[currentSlide].image_url
-                ? (slides[currentSlide].image_url.startsWith('http')
+                ? (slides[currentSlide].image_url.startsWith('data:') || slides[currentSlide].image_url.startsWith('http')
                     ? slides[currentSlide].image_url
                     : `http://localhost:5000${slides[currentSlide].image_url}`)
-                : 'https://via.placeholder.com/1200x600/8B0000/FFFFFF?text=Carousel'
+                : 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Carousel'
             }
             alt={`Slide ${currentSlide + 1}`}
             className="w-full h-full object-cover transition-opacity duration-700"
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/1200x600/8B0000/FFFFFF?text=Carousel';
+              e.target.src = 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Carousel';
             }}
           />
         )}
@@ -90,10 +90,10 @@ const ImageCarousel = () => {
         {slides.length > 0 && (
           <div className="absolute top-0 left-0 right-0 h-[60%] sm:h-[65%] md:h-[70%] bg-gradient-to-b from-amber-50 via-amber-50/95 to-transparent flex items-center justify-center px-4 sm:px-6 md:px-8">
             <div className="text-center max-w-4xl w-full">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-history-red mb-4 md:mb-6 leading-tight uppercase tracking-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary mb-4 md:mb-6 leading-tight uppercase tracking-tight">
                 {slides[currentSlide].quote}
               </h2>
-              <p className="text-lg sm:text-xl md:text-2xl text-history-red font-semibold">
+              <p className="text-lg sm:text-xl md:text-2xl text-primary font-semibold">
                 {slides[currentSlide].author || 'Thiên Sử Ký'}
               </p>
             </div>
@@ -146,7 +146,7 @@ const ImageCarousel = () => {
       {/* Loading State */}
       {loading && (
         <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-30">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       )}
 
@@ -166,7 +166,7 @@ const ImageCarousel = () => {
             onClick={() => goToSlide(index)}
             className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
               currentSlide === index
-                ? 'bg-history-red w-8 md:w-10'
+                ? 'bg-primary w-8 md:w-10'
                 : 'bg-white/50 hover:bg-white/75'
             }`}
             aria-label={`Go to slide ${index + 1}`}

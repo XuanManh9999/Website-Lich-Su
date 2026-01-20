@@ -1,6 +1,6 @@
-# Website Nhân Vật Lịch Sử Việt Nam
+# Việt Sử Quân
 
-Website giới thiệu các nhân vật lịch sử Việt Nam với tích hợp NFC và audio kể chuyện.
+**Việt Sử Quân** - Website giới thiệu các nhân vật lịch sử Việt Nam với tích hợp NFC và audio kể chuyện. Khám phá hành trình lịch sử hào hùng của dân tộc qua các anh hùng, danh tướng và nhà cách mạng Việt Nam.
 
 ## Công nghệ
 

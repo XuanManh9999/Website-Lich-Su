@@ -15,7 +15,7 @@ const AdminTable = ({
   if (loading) {
     return (
       <div className="text-center py-20">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
       </div>
     );
@@ -38,12 +38,12 @@ const AdminTable = ({
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className="px-4 py-3 text-left text-sm font-semibold text-history-red"
+                  className="px-4 py-3 text-left text-sm font-semibold text-primary"
                 >
                   {col.label}
                 </th>
               ))}
-              <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary">
                 Thao Tác
               </th>
             </tr>
@@ -69,7 +69,7 @@ const AdminTable = ({
                     {onDelete && (
                       <button
                         onClick={() => onDelete(row.id)}
-                        className="bg-red-500 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-red-600 transition-colors"
+                        className="bg-blue-500 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-red-600 transition-colors"
                       >
                         Xóa
                       </button>

@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "viet-su-quan-server",
   "version": "1.0.0",
-  "description": "Backend API for website lich su",
+  "description": "Backend API for Việt Sử Quân",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

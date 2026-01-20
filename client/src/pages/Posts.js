@@ -65,7 +65,7 @@ const Posts = () => {
     <div className="w-full min-h-screen bg-gray-50 py-8 md:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
             Blog lịch sử
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6 md:mb-8">
@@ -80,8 +80,8 @@ const Posts = () => {
                 onClick={() => handleCategoryChange(category)}
                 className={`px-5 py-2.5 rounded-full font-medium text-sm md:text-base transition-all ${
                   selectedCategory === category
-                    ? 'bg-history-red text-white shadow-md'
-                    : 'bg-pink-100 text-history-red hover:bg-pink-200'
+                    ? 'bg-primary text-white shadow-md'
+                    : 'bg-blue-100 text-primary hover:bg-blue-200'
                 }`}
               >
                 {category}
@@ -92,7 +92,7 @@ const Posts = () => {
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
           </div>
         ) : filteredPosts.length === 0 ? (
@@ -104,8 +104,8 @@ const Posts = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {currentPosts.map((post) => {
                 const imageUrl = post.image_url 
-                  ? (post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`)
-                  : 'https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Blog';
+                  ? (post.image_url.startsWith('data:') || post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`)
+                  : 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
                 
                 const readingTime = calculateReadingTime(post.content);
                 const author = post.author || 'Tác giả';
@@ -130,7 +130,7 @@ const Posts = () => {
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Blog';
+                          e.target.src = 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
                         }}
                       />
                     </div>
@@ -139,14 +139,14 @@ const Posts = () => {
                     <div className="p-5 md:p-6 flex flex-col gap-4">
                       {/* Metadata Bar */}
                       <div className="flex items-center justify-between text-xs md:text-sm">
-                        <span className="bg-history-red text-white px-2 py-1 rounded font-semibold">
+                        <span className="bg-primary text-white px-2 py-1 rounded font-semibold">
                           Blog
                         </span>
                         <span className="text-gray-600">{readingTime} phút</span>
                       </div>
 
                       {/* Title */}
-                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-history-red line-clamp-2 group-hover:text-history-red-light transition-colors">
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary line-clamp-2 group-hover:text-primary-light transition-colors">
                         {post.title}
                       </h2>
 
@@ -173,7 +173,7 @@ const Posts = () => {
 
                       {/* Read More Link */}
                       <div className="mt-auto pt-2">
-                        <span className="text-history-red font-semibold text-sm md:text-base group-hover:text-history-red-light transition-colors inline-flex items-center gap-1">
+                        <span className="text-primary font-semibold text-sm md:text-base group-hover:text-primary-light transition-colors inline-flex items-center gap-1">
                           Đọc tiếp
                           <span className="transition-transform duration-200 group-hover:translate-x-1">
                             →

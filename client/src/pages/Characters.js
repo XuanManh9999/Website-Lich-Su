@@ -24,7 +24,7 @@ const Characters = () => {
     <div className="w-full min-h-screen bg-gray-50 py-8 md:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
             Danh Sách Nhân Vật Lịch Sử
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -34,7 +34,7 @@ const Characters = () => {
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
           </div>
         ) : (
@@ -56,7 +56,7 @@ const Characters = () => {
                     </div>
                   )}
                   <div className="flex-1 flex flex-col justify-center">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-history-red mb-2 group-hover:text-history-red-light transition-colors">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-2 group-hover:text-primary-light transition-colors">
                       {character.name}
                     </h2>
                     {character.timeline && (
@@ -69,7 +69,7 @@ const Characters = () => {
                         {character.summary}
                       </p>
                     )}
-                    <div className="mt-3 flex items-center text-history-red font-semibold text-sm sm:text-base group-hover:gap-2 gap-1 transition-all">
+                    <div className="mt-3 flex items-center text-primary font-semibold text-sm sm:text-base group-hover:gap-2 gap-1 transition-all">
                       Xem chi tiết
                       <span className="transition-transform duration-200 group-hover:translate-x-1">
                         →

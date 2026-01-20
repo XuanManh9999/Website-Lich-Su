@@ -53,7 +53,7 @@ const PaymentResult = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang xử lý...</p>
         </div>
       </div>
@@ -71,7 +71,7 @@ const PaymentResult = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-history-red mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
                 Thanh toán thành công!
               </h1>
               <p className="text-gray-600 mb-6 text-lg">
@@ -88,7 +88,7 @@ const PaymentResult = () => {
               <div className="space-y-3">
                 <Link
                   to="/san-pham"
-                  className="block w-full bg-history-red text-white py-3 px-6 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+                  className="block w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-light transition-colors"
                 >
                   Tiếp tục mua sắm
                 </Link>
@@ -116,7 +116,7 @@ const PaymentResult = () => {
               <div className="space-y-3">
                 <Link
                   to="/gio-hang"
-                  className="block w-full bg-history-red text-white py-3 px-6 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+                  className="block w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-light transition-colors"
                 >
                   Thử lại thanh toán
                 </Link>

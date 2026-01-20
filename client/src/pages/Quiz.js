@@ -50,7 +50,7 @@ const Quiz = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải câu hỏi...</p>
         </div>
       </div>
@@ -72,15 +72,15 @@ const Quiz = () => {
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-history-red mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
               Kết Quả Quiz
             </h2>
             <p className="text-2xl md:text-3xl text-gray-700 mb-8">
-              Bạn đã trả lời đúng <span className="font-bold text-history-red">{score}</span> / {questions.length} câu
+              Bạn đã trả lời đúng <span className="font-bold text-primary">{score}</span> / {questions.length} câu
             </p>
             <button
               onClick={handleRestart}
-              className="bg-history-red text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-history-red-light transition-colors"
+              className="bg-primary text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-primary-light transition-colors"
             >
               Làm Lại
             </button>
@@ -95,7 +95,7 @@ const Quiz = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red text-center mb-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center mb-8">
           Quiz Trắc Nghiệm
         </h1>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
@@ -110,8 +110,8 @@ const Quiz = () => {
               <button
                 className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${
                   selectedAnswer === 'A'
-                    ? 'border-history-red bg-red-50 text-history-red font-semibold'
-                    : 'border-gray-300 hover:border-history-red hover:bg-red-50'
+                    ? 'border-primary bg-blue-50 text-primary font-semibold'
+                    : 'border-gray-300 hover:border-primary hover:bg-blue-50'
                 }`}
                 onClick={() => handleAnswerSelect('A')}
               >
@@ -120,8 +120,8 @@ const Quiz = () => {
               <button
                 className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${
                   selectedAnswer === 'B'
-                    ? 'border-history-red bg-red-50 text-history-red font-semibold'
-                    : 'border-gray-300 hover:border-history-red hover:bg-red-50'
+                    ? 'border-primary bg-blue-50 text-primary font-semibold'
+                    : 'border-gray-300 hover:border-primary hover:bg-blue-50'
                 }`}
                 onClick={() => handleAnswerSelect('B')}
               >
@@ -131,8 +131,8 @@ const Quiz = () => {
                 <button
                   className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${
                     selectedAnswer === 'C'
-                      ? 'border-history-red bg-red-50 text-history-red font-semibold'
-                      : 'border-gray-300 hover:border-history-red hover:bg-red-50'
+                      ? 'border-primary bg-blue-50 text-primary font-semibold'
+                      : 'border-gray-300 hover:border-primary hover:bg-blue-50'
                   }`}
                   onClick={() => handleAnswerSelect('C')}
                 >
@@ -143,8 +143,8 @@ const Quiz = () => {
                 <button
                   className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${
                     selectedAnswer === 'D'
-                      ? 'border-history-red bg-red-50 text-history-red font-semibold'
-                      : 'border-gray-300 hover:border-history-red hover:bg-red-50'
+                      ? 'border-primary bg-blue-50 text-primary font-semibold'
+                      : 'border-gray-300 hover:border-primary hover:bg-blue-50'
                   }`}
                   onClick={() => handleAnswerSelect('D')}
                 >
@@ -153,7 +153,7 @@ const Quiz = () => {
               )}
             </div>
             <button
-              className="w-full sm:w-auto sm:ml-auto bg-history-red text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-history-red-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed block sm:inline-block"
+              className="w-full sm:w-auto sm:ml-auto bg-primary text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed block sm:inline-block"
               onClick={handleNext}
               disabled={!selectedAnswer}
             >

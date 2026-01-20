@@ -1,34 +1,34 @@
 #!/bin/bash
 
-echo "=== Website Lich Su Applications Status ==="
+echo "=== Trạng thái Việt Sử Quân ==="
 echo ""
 
 echo "SERVER (Backend - Port 5000):"
 if ps aux | grep "node index.js" | grep -v grep > /dev/null; then
-    echo "✓ Running"
+    echo "✅ Đang chạy"
     ps aux | grep "node index.js" | grep -v grep | head -2
 else
-    echo "✗ Not running"
+    echo "❌ Không chạy"
 fi
 
 echo ""
 echo "CLIENT (Frontend - Port 3000):"
 if ps aux | grep "serve.*build" | grep -v grep > /dev/null; then
-    echo "✓ Running"
+    echo "✅ Đang chạy"
     ps aux | grep "serve.*build" | grep -v grep | head -2
 else
-    echo "✗ Not running"
+    echo "❌ Không chạy"
 fi
 
 echo ""
-echo "=== Port Status ==="
-lsof -i :5000 -i :3000 2>/dev/null | grep LISTEN || echo "No applications listening on ports 5000 and 3000"
+echo "=== Trạng thái Port ==="
+lsof -i :5000 -i :3000 2>/dev/null | grep LISTEN || echo "Không có ứng dụng nào đang lắng nghe trên port 5000 và 3000"
 
 echo ""
-echo "=== Recent Logs ==="
+echo "=== Log gần đây ==="
 echo ""
-echo "--- Server Log (last 10 lines) ---"
-tail -10 /tmp/server.log 2>/dev/null || echo "No server log found"
+echo "--- Server Log (10 dòng cuối) ---"
+tail -10 /tmp/server.log 2>/dev/null || echo "Không tìm thấy log server"
 echo ""
-echo "--- Client Log (last 10 lines) ---"
-tail -10 /tmp/client.log 2>/dev/null || echo "No client log found"
+echo "--- Client Log (10 dòng cuối) ---"
+tail -10 /tmp/client.log 2>/dev/null || echo "Không tìm thấy log client"

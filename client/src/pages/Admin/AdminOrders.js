@@ -168,7 +168,7 @@ const AdminOrders = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-history-red">Quản Trị Đơn Hàng</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">Quản Trị Đơn Hàng</h1>
         </div>
 
         <AdminSearchFilter
@@ -197,7 +197,7 @@ const AdminOrders = () => {
             <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 md:p-8">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl md:text-3xl font-bold text-history-red">
+                  <h2 className="text-2xl md:text-3xl font-bold text-primary">
                     Chi Tiết Đơn Hàng #{selectedOrder.order_id}
                   </h2>
                   <button
@@ -253,10 +253,10 @@ const AdminOrders = () => {
                       <table className="w-full">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">Sản phẩm</th>
-                            <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">SL</th>
-                            <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">Giá</th>
-                            <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">Thành tiền</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Sản phẩm</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold text-primary">SL</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Giá</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Thành tiền</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
@@ -296,7 +296,7 @@ const AdminOrders = () => {
                         className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                           selectedOrder.status === status
                             ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                            : 'bg-history-red text-white hover:bg-history-red-light'
+                            : 'bg-primary text-white hover:bg-primary-light'
                         }`}
                       >
                         {getStatusLabel(status)}

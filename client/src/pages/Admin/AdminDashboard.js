@@ -53,14 +53,14 @@ const AdminDashboard = () => {
     { label: 'Sản Phẩm', count: stats.products, path: '/admin/products', color: 'bg-yellow-500', icon: '🛍️' },
     { label: 'Câu Hỏi Quiz', count: stats.quiz, path: '/admin/quiz', color: 'bg-purple-500', icon: '❓' },
     { label: 'Đơn Hàng', count: stats.orders, path: '/admin/orders', color: 'bg-indigo-500', icon: '💰' },
-    { label: 'Quản Trị Viên', count: stats.admins, path: '/admin/admins', color: 'bg-red-500', icon: '👥' },
+    { label: 'Quản Trị Viên', count: stats.admins, path: '/admin/admins', color: 'bg-blue-500', icon: '👥' },
   ];
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
         </div>
       </div>
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-history-red mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8">
           Tổng Quan Hệ Thống
         </h1>
 
@@ -93,13 +93,13 @@ const AdminDashboard = () => {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-history-red mb-4">Quản Lý Nhanh</h2>
+          <h2 className="text-2xl font-bold text-primary mb-4">Quản Lý Nhanh</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {statCards.map((card) => (
               <Link
                 key={card.path}
                 to={card.path}
-                className="p-4 border-2 border-gray-200 rounded-lg hover:border-history-red hover:bg-history-red/5 transition-colors"
+                className="p-4 border-2 border-gray-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{card.icon}</span>

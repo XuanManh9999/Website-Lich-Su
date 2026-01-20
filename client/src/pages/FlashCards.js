@@ -70,7 +70,7 @@ const FlashCards = () => {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
             Flash Card học lịch sử
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -80,7 +80,7 @@ const FlashCards = () => {
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
           </div>
         ) : flashcardSets.length === 0 ? (
@@ -143,7 +143,7 @@ const FlashCards = () => {
                   {/* Start Button */}
                   <Link
                     to={`/quiz/${set.id}`}
-                    className="w-full bg-history-red text-white py-3 px-6 rounded-lg font-semibold hover:bg-history-red-light transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-light transition-colors flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />

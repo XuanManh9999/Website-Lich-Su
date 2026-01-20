@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-history-red text-white mt-auto">
+    <footer className="bg-primary text-white mt-auto">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
@@ -11,12 +11,12 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-4">
               <div className="bg-white/20 px-2 py-1 rounded text-xs font-bold">
-                TSK
+                VSQ
               </div>
-              <h3 className="text-xl md:text-2xl font-bold">Thiên Sử Ký</h3>
+              <h3 className="text-xl md:text-2xl font-bold">Việt Sử Quân</h3>
             </div>
             <p className="text-sm md:text-base text-white/90 leading-relaxed">
-              Nơi lưu giữ và chia sẻ những câu chuyện lịch sử đầy cảm hứng của dân tộc Việt Nam.
+              Nơi lưu giữ và chia sẻ những câu chuyện lịch sử hào hùng của các anh hùng dân tộc Việt Nam.
             </p>
             {/* Social Media Icons */}
             <div className="flex gap-4 pt-2">
@@ -94,17 +94,17 @@ const Footer = () => {
             <ul className="space-y-2 text-sm md:text-base">
               <li>
                 <Link to="/san-pham" className="text-white/90 hover:text-white transition-colors">
-                  Board Game Sử Ký
+                  Board Game Lịch Sử
                 </Link>
               </li>
               <li>
                 <Link to="/san-pham" className="text-white/90 hover:text-white transition-colors">
-                  Mô hình Kiến Sử
+                  Mô hình Lịch Sử
                 </Link>
               </li>
               <li>
                 <Link to="/san-pham" className="text-white/90 hover:text-white transition-colors">
-                  Áo Thiên Sử
+                  Quà Tặng Lịch Sử
                 </Link>
               </li>
               <li>
@@ -173,8 +173,8 @@ const Footer = () => {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <a href="mailto:thiensuky@gmail.com" className="hover:text-white transition-colors">
-                  thiensuky@gmail.com
+                <a href="mailto:vietsuquan@gmail.com" className="hover:text-white transition-colors">
+                  vietsuquan@gmail.com
                 </a>
               </li>
             </ul>
@@ -186,7 +186,7 @@ const Footer = () => {
       <div className="border-t border-white/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
           <p className="text-center text-sm md:text-base text-white/80">
-            © 2026 Thiên Sử Ký. Tất cả quyền được bảo lưu.
+            © 2026 Việt Sử Quân. Tất cả quyền được bảo lưu.
           </p>
         </div>
       </div>

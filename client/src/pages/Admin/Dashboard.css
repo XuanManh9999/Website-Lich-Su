@@ -13,12 +13,12 @@
 }
 
 .dashboard-header h1 {
-  color: #8B0000;
+  color: #0F4C81;
   font-size: 2rem;
 }
 
 .btn-primary {
-  background: #8B0000;
+  background: #0F4C81;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -30,7 +30,7 @@
 }
 
 .btn-primary:hover {
-  background: #A52A2A;
+  background: #1E88E5;
 }
 
 .character-form {
@@ -42,7 +42,7 @@
 }
 
 .character-form h2 {
-  color: #8B0000;
+  color: #0F4C81;
   margin-bottom: 20px;
 }
 
@@ -76,7 +76,7 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #8B0000;
+  border-color: #0F4C81;
 }
 
 .form-group textarea {
@@ -90,7 +90,7 @@
 }
 
 .btn-submit {
-  background: #8B0000;
+  background: #0F4C81;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -101,7 +101,7 @@
 }
 
 .btn-submit:hover {
-  background: #A52A2A;
+  background: #1E88E5;
 }
 
 .btn-cancel {
@@ -126,7 +126,7 @@
 }
 
 .characters-list h2 {
-  color: #8B0000;
+  color: #0F4C81;
   margin-bottom: 20px;
 }
 
@@ -144,7 +144,7 @@
 
 .characters-table th {
   background: #f5f5f5;
-  color: #8B0000;
+  color: #0F4C81;
   font-weight: bold;
 }
 

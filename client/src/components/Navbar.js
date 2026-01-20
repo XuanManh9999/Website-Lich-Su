@@ -34,16 +34,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-history-red text-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-primary text-white shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-white/20 px-2 py-1 rounded text-xs font-bold">
-              TSK
-            </div>
+          <Link to="/" className="flex items-center gap-3 group">
+            <img 
+              src="/logo.jpg" 
+              alt="Việt Sử Quân Logo" 
+              className="h-10 w-10 md:h-12 md:w-12 rounded-md object-cover shadow-lg group-hover:scale-105 transition-transform"
+            />
             <span className="text-xl sm:text-2xl font-bold group-hover:opacity-90 transition-opacity">
-              Thiên Sử Ký
+              Việt Sử Quân
             </span>
           </Link>
 
@@ -103,7 +105,7 @@ const Navbar = () => {
               </svg>
               Giỏ hàng
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-yellow-400 text-history-red text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}
@@ -201,7 +203,7 @@ const Navbar = () => {
               </svg>
               Giỏ hàng
               {cartCount > 0 && (
-                <span className="bg-yellow-400 text-history-red text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ml-1">
+                <span className="bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ml-1">
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}

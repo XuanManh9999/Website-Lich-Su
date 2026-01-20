@@ -46,7 +46,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await adminAPI.register({
+      await adminAPI.register({
         email: formData.email,
         last_name: formData.last_name,
         first_name: formData.first_name,
@@ -65,12 +65,12 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 md:p-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-history-red text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
           Đăng Ký
         </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-blue-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -225,7 +225,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-history-red text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-history-red-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Đang đăng ký...' : 'Đăng ký'}
           </button>
@@ -233,7 +233,7 @@ const Register = () => {
           {/* Login Link */}
           <div className="text-center text-sm text-gray-600">
             Đã có tài khoản?{' '}
-            <Link to="/admin/login" className="text-history-red font-semibold hover:underline">
+            <Link to="/admin/login" className="text-primary font-semibold hover:underline">
               Đăng nhập
             </Link>
           </div>

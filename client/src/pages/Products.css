@@ -3,7 +3,7 @@
 }
 
 .products-page h1 {
-  color: #8B0000;
+  color: #0F4C81;
   font-size: 2.5rem;
   margin-bottom: 30px;
   text-align: center;
@@ -44,13 +44,13 @@
 }
 
 .product-info h2 {
-  color: #8B0000;
+  color: #0F4C81;
   font-size: 1.3rem;
   margin-bottom: 10px;
 }
 
 .product-price {
-  color: #8B0000;
+  color: #0F4C81;
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 10px;
@@ -64,7 +64,7 @@
 }
 
 .btn-add-cart {
-  background: #8B0000;
+  background: #0F4C81;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -76,7 +76,7 @@
 }
 
 .btn-add-cart:hover {
-  background: #A52A2A;
+  background: #1E88E5;
 }
 
 .loading {

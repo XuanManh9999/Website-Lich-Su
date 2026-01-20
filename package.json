@@ -1,7 +1,7 @@
 {
-  "name": "website-lich-su",
+  "name": "viet-su-quan",
   "version": "1.0.0",
-  "description": "Website giới thiệu nhân vật lịch sử Việt Nam",
+  "description": "Việt Sử Quân - Website giới thiệu nhân vật lịch sử Việt Nam",
   "main": "server/index.js",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",

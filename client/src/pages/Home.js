@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="bg-history-red text-white py-20 md:py-28 lg:py-32">
+      <section className="bg-gradient-to-br from-primary via-primary-dark to-primary-700 text-white py-20 md:py-28 lg:py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left Content */}

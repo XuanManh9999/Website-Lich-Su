@@ -28,7 +28,7 @@ const CharacterDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
         </div>
       </div>
@@ -67,8 +67,8 @@ const CharacterDetail = () => {
           {/* Content */}
           <div className="p-6 md:p-8 lg:p-10">
             {/* Header */}
-            <header className="mb-8 pb-6 border-b-2 border-history-red">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-4">
+            <header className="mb-8 pb-6 border-b-2 border-primary">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
                 {character.name}
               </h1>
               {character.timeline && (
@@ -81,7 +81,7 @@ const CharacterDetail = () => {
             {/* Summary */}
             {character.summary && (
               <section className="mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-history-red mb-4 pb-2 border-b border-gray-200">
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">
                   Giới Thiệu
                 </h2>
                 <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
@@ -93,7 +93,7 @@ const CharacterDetail = () => {
             {/* Audio */}
             {audioUrl && (
               <section className="mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-history-red mb-4 pb-2 border-b border-gray-200">
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">
                   Nghe Kể Chuyện
                 </h2>
                 <AudioPlayer audioUrl={audioUrl} />
@@ -103,7 +103,7 @@ const CharacterDetail = () => {
             {/* Content */}
             {character.content && (
               <section>
-                <h2 className="text-2xl sm:text-3xl font-bold text-history-red mb-4 pb-2 border-b border-gray-200">
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">
                   Chi Tiết
                 </h2>
                 <div

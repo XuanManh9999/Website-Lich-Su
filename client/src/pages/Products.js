@@ -56,7 +56,7 @@ const Products = () => {
     <div className="w-full min-h-screen bg-gray-50 py-8 md:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
             Sản phẩm
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6 md:mb-8">
@@ -97,7 +97,7 @@ const Products = () => {
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
           </div>
         ) : filteredProducts.length === 0 ? (
@@ -108,7 +108,7 @@ const Products = () => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="mt-4 text-history-red hover:underline font-semibold"
+                className="mt-4 text-primary hover:underline font-semibold"
               >
                 Xóa bộ lọc
               </button>
@@ -128,21 +128,25 @@ const Products = () => {
                   {product.image_url && (
                     <div className="w-full h-56 sm:h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                       <img
-                        src={product.image_url.startsWith('http') ? product.image_url : `http://localhost:5000${product.image_url}`}
+                        src={
+                          product.image_url.startsWith('data:') || product.image_url.startsWith('http')
+                            ? product.image_url
+                            : `http://localhost:5000${product.image_url}`
+                        }
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x500/8B0000/FFFFFF?text=Product';
+                          e.target.src = 'https://via.placeholder.com/400x500/0F4C81/FFFFFF?text=Product';
                         }}
                       />
                     </div>
                   )}
                   <div className="p-6 flex flex-col gap-4">
-                    <h2 className="text-xl sm:text-2xl font-semibold text-history-red group-hover:text-history-red-light transition-colors">
+                    <h2 className="text-xl sm:text-2xl font-semibold text-primary group-hover:text-primary-light transition-colors">
                       {product.name}
                     </h2>
                     {product.price && (
-                      <p className="text-2xl font-bold text-history-red">
+                      <p className="text-2xl font-bold text-primary">
                         {new Intl.NumberFormat('vi-VN', {
                           style: 'currency',
                           currency: 'VND',
@@ -156,7 +160,7 @@ const Products = () => {
                     )}
                     <Link
                       to={`/san-pham/${productSlug}`}
-                      className="w-full bg-history-red text-white py-3 px-4 rounded-lg font-semibold hover:bg-history-red-light transition-colors mt-auto text-center block"
+                      className="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold hover:bg-primary-light transition-colors mt-auto text-center block"
                     >
                       Xem chi tiết
                     </Link>

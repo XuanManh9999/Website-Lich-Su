@@ -36,12 +36,12 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 md:p-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-history-red text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
           Đăng Nhập Admin
         </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-blue-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -75,7 +75,7 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-history-red text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-history-red-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
           </button>
@@ -83,13 +83,13 @@ const AdminLogin = () => {
           {/* Links */}
           <div className="space-y-3 text-center text-sm text-gray-600">
             <div>
-              <Link to="/admin/forgot-password" className="text-history-red font-semibold hover:underline">
+              <Link to="/admin/forgot-password" className="text-primary font-semibold hover:underline">
                 Quên mật khẩu?
               </Link>
             </div>
             <div>
               Chưa có tài khoản?{' '}
-              <Link to="/admin/register" className="text-history-red font-semibold hover:underline">
+              <Link to="/admin/register" className="text-primary font-semibold hover:underline">
                 Đăng ký
               </Link>
             </div>

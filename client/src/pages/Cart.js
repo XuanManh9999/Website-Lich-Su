@@ -4,7 +4,7 @@ import { getCart, removeFromCart, updateCartQuantity, getCartTotal, clearCart } 
 import { paymentAPI } from '../services/api';
 
 const Cart = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const [processing, setProcessing] = useState(false);
@@ -94,7 +94,7 @@ const Cart = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center mb-12">
             Giỏ Hàng
           </h1>
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center">
@@ -102,7 +102,7 @@ const Cart = () => {
             <p className="text-xl text-gray-600 mb-8">Giỏ hàng của bạn đang trống.</p>
             <Link
               to="/san-pham"
-              className="inline-block bg-history-red text-white px-8 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+              className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
             >
               Tiếp Tục Mua Sắm
             </Link>
@@ -116,7 +116,7 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-history-red">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary">
             Giỏ Hàng
           </h1>
           {cartItems.length > 0 && (
@@ -133,9 +133,11 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => {
-              const imageUrl = item.image_url 
-                ? (item.image_url.startsWith('http') ? item.image_url : `http://localhost:5000${item.image_url}`)
-                : 'https://via.placeholder.com/150x200/8B0000/FFFFFF?text=Product';
+              const imageUrl = item.image_url
+                ? (item.image_url.startsWith('data:') || item.image_url.startsWith('http')
+                    ? item.image_url 
+                    : `http://localhost:5000${item.image_url}`)
+                : 'https://via.placeholder.com/150x200/0F4C81/FFFFFF?text=Product';
 
               return (
                 <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -150,7 +152,7 @@ const Cart = () => {
                         alt={item.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/150x200/8B0000/FFFFFF?text=Product';
+                          e.target.src = 'https://via.placeholder.com/150x200/0F4C81/FFFFFF?text=Product';
                         }}
                       />
                     </Link>
@@ -160,11 +162,11 @@ const Cart = () => {
                       <div className="flex-1">
                         <Link
                           to={`/san-pham/${item.slug || `product-${item.id}`}`}
-                          className="text-xl md:text-2xl font-semibold text-history-red hover:text-history-red-light transition-colors block mb-2"
+                          className="text-xl md:text-2xl font-semibold text-primary hover:text-primary-light transition-colors block mb-2"
                         >
                           {item.name}
                         </Link>
-                        <p className="text-2xl font-bold text-history-red">
+                        <p className="text-2xl font-bold text-primary">
                           {new Intl.NumberFormat('vi-VN', {
                             style: 'currency',
                             currency: 'VND',
@@ -179,7 +181,7 @@ const Cart = () => {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                              className="w-8 h-8 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-history-red hover:text-history-red transition-colors font-semibold"
+                              className="w-8 h-8 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-primary hover:text-primary transition-colors font-semibold"
                             >
                               -
                             </button>
@@ -195,7 +197,7 @@ const Cart = () => {
                             />
                             <button
                               onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                              className="w-8 h-8 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-history-red hover:text-history-red transition-colors font-semibold"
+                              className="w-8 h-8 border-2 border-gray-300 rounded-lg flex items-center justify-center hover:border-primary hover:text-primary transition-colors font-semibold"
                             >
                               +
                             </button>
@@ -204,7 +206,7 @@ const Cart = () => {
 
                         <div className="text-right">
                           <p className="text-sm text-gray-600 mb-1">Thành tiền:</p>
-                          <p className="text-xl font-bold text-history-red">
+                          <p className="text-xl font-bold text-primary">
                             {new Intl.NumberFormat('vi-VN', {
                               style: 'currency',
                               currency: 'VND',
@@ -214,7 +216,7 @@ const Cart = () => {
 
                         <button
                           onClick={() => handleRemoveItem(item.id)}
-                          className="text-red-600 hover:text-red-700 font-semibold p-2 hover:bg-red-50 rounded-lg transition-colors"
+                          className="text-red-600 hover:text-red-700 font-semibold p-2 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Xóa sản phẩm"
                         >
                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,7 +234,7 @@ const Cart = () => {
           {/* Cart Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4">
-              <h2 className="text-2xl font-bold text-history-red mb-6">Tóm tắt đơn hàng</h2>
+              <h2 className="text-2xl font-bold text-primary mb-6">Tóm tắt đơn hàng</h2>
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-700">
@@ -241,7 +243,7 @@ const Cart = () => {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Tổng tiền:</span>
-                  <span className="text-2xl font-bold text-history-red">
+                  <span className="text-2xl font-bold text-primary">
                     {new Intl.NumberFormat('vi-VN', {
                       style: 'currency',
                       currency: 'VND',
@@ -254,7 +256,7 @@ const Cart = () => {
                 <button
                   onClick={handleCheckout}
                   disabled={processing || cartItems.length === 0}
-                  className="w-full bg-history-red text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-history-red-light transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-primary text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {processing ? 'Đang xử lý...' : 'Thanh toán'}
                 </button>

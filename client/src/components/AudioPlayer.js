@@ -62,10 +62,10 @@ const AudioPlayer = ({ audioUrl, autoPlay = false }) => {
   const progress = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="bg-gradient-to-r from-history-red to-history-red-light rounded-xl p-5 md:p-6 flex items-center gap-4 shadow-lg">
+    <div className="bg-gradient-to-r from-history-red to-primary-light rounded-xl p-5 md:p-6 flex items-center gap-4 shadow-lg">
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
       <button
-        className="bg-white rounded-full w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-2xl md:text-3xl text-history-red hover:scale-110 transition-transform duration-200 flex-shrink-0 shadow-md"
+        className="bg-white rounded-full w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-2xl md:text-3xl text-primary hover:scale-110 transition-transform duration-200 flex-shrink-0 shadow-md"
         onClick={togglePlay}
         aria-label={isPlaying ? 'Pause' : 'Play'}
       >

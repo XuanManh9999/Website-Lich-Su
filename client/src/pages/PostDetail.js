@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { postAPI } from '../services/api';
+import '../styles/prose.css';
 
 const PostDetail = () => {
   const { slug } = useParams();
@@ -56,7 +57,7 @@ const PostDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
         </div>
       </div>
@@ -70,7 +71,7 @@ const PostDetail = () => {
           <p className="text-red-600 text-xl mb-4">{error || 'Không tìm thấy bài viết'}</p>
           <button
             onClick={() => navigate('/blog')}
-            className="text-history-red hover:underline font-semibold"
+            className="text-primary hover:underline font-semibold"
           >
             Quay lại danh sách blog
           </button>
@@ -80,8 +81,8 @@ const PostDetail = () => {
   }
 
   const imageUrl = post.image_url 
-    ? (post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`)
-    : 'https://via.placeholder.com/1200x600/8B0000/FFFFFF?text=Blog';
+    ? (post.image_url.startsWith('data:') || post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`)
+    : 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Blog';
 
   // Calculate reading time (approximate: 200 words per minute)
   const calculateReadingTime = (content) => {
@@ -111,7 +112,7 @@ const PostDetail = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-history-red hover:text-history-red-light transition-colors mb-6"
+          className="flex items-center gap-2 text-primary hover:text-primary-light transition-colors mb-6"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -123,7 +124,7 @@ const PostDetail = () => {
         <article className="bg-white rounded-2xl shadow-lg overflow-hidden">
           {/* Tag */}
           <div className="px-6 md:px-8 pt-6 md:pt-8">
-            <span className="inline-block bg-pink-100 text-history-red px-3 py-1 rounded-full text-sm font-semibold">
+            <span className="inline-block bg-blue-100 text-primary px-3 py-1 rounded-full text-sm font-semibold">
               Blog
             </span>
           </div>
@@ -169,7 +170,7 @@ const PostDetail = () => {
               alt={post.title}
               className="w-full h-full object-cover"
               onError={(e) => {
-                e.target.src = 'https://via.placeholder.com/1200x600/8B0000/FFFFFF?text=Blog';
+                e.target.src = 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Blog';
               }}
             />
           </div>
@@ -177,9 +178,9 @@ const PostDetail = () => {
           {/* Content */}
           <div className="px-6 md:px-8 py-8 md:py-12">
             <div 
-              className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-lg prose-primary max-w-none"
               dangerouslySetInnerHTML={{ 
-                __html: post.content?.replace(/\n/g, '<br />') || 'Chưa có nội dung.' 
+                __html: post.content || '<p>Chưa có nội dung.</p>' 
               }}
             />
           </div>
@@ -188,14 +189,14 @@ const PostDetail = () => {
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <section className="mt-12 md:mt-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-history-red mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-8 text-center">
               Bài viết liên quan
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {relatedPosts.map((relatedPost) => {
                 const relatedImageUrl = relatedPost.image_url 
-                  ? (relatedPost.image_url.startsWith('http') ? relatedPost.image_url : `http://localhost:5000${relatedPost.image_url}`)
-                  : 'https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Blog';
+                  ? (relatedPost.image_url.startsWith('data:') || relatedPost.image_url.startsWith('http') ? relatedPost.image_url : `http://localhost:5000${relatedPost.image_url}`)
+                  : 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
                 
                 const relatedReadingTime = (() => {
                   if (!relatedPost.content) return '5';
@@ -226,7 +227,7 @@ const PostDetail = () => {
                         alt={relatedPost.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x300/8B0000/FFFFFF?text=Blog';
+                          e.target.src = 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
                         }}
                       />
                     </div>
@@ -235,14 +236,14 @@ const PostDetail = () => {
                     <div className="p-5 md:p-6 flex flex-col gap-4">
                       {/* Metadata Bar */}
                       <div className="flex items-center justify-between text-xs md:text-sm">
-                        <span className="bg-history-red text-white px-2.5 py-1 rounded font-semibold text-xs">
+                        <span className="bg-primary text-white px-2.5 py-1 rounded font-semibold text-xs">
                           Blog
                         </span>
                         <span className="text-gray-600">{relatedReadingTime} phút</span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-history-red line-clamp-2 group-hover:text-history-red-light transition-colors">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary line-clamp-2 group-hover:text-primary-light transition-colors">
                         {relatedPost.title}
                       </h3>
 
@@ -269,7 +270,7 @@ const PostDetail = () => {
 
                       {/* Read More Link */}
                       <div className="mt-auto pt-2">
-                        <span className="text-history-red font-semibold text-sm md:text-base group-hover:text-history-red-light transition-colors inline-flex items-center gap-1">
+                        <span className="text-primary font-semibold text-sm md:text-base group-hover:text-primary-light transition-colors inline-flex items-center gap-1">
                           Đọc tiếp
                           <span className="transition-transform duration-200 group-hover:translate-x-1">
                             →

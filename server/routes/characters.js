@@ -56,84 +56,54 @@ router.get("/:id", async (req, res) => {
 });
 
 // Tạo nhân vật mới (admin only)
-router.post(
-  "/",
-  authenticateToken,
-  upload.fields([
-    { name: "image", maxCount: 1 },
-    { name: "audio", maxCount: 1 },
-  ]),
-  async (req, res) => {
-    try {
-      const { name, slug, timeline, summary, content } = req.body;
-      const imageFile = req.files?.image?.[0];
-      const audioFile = req.files?.audio?.[0];
+router.post("/", authenticateToken, async (req, res) => {
+  try {
+    const { name, slug, timeline, summary, content, image_url, audio_url } = req.body;
 
-      const imageUrl = imageFile ? `/uploads/${imageFile.filename}` : null;
-      const audioUrl = audioFile ? `/uploads/${audioFile.filename}` : null;
+    const [result] = await db.query(
+      "INSERT INTO characters (name, slug, timeline, image_url, summary, content, audio_url) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [name, slug, timeline, image_url || null, summary, content, audio_url || null]
+    );
 
-      const [result] = await db.query(
-        "INSERT INTO characters (name, slug, timeline, image_url, summary, content, audio_url) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [name, slug, timeline, imageUrl, summary, content, audioUrl]
-      );
-
-      res.status(201).json({
-        id: result.insertId,
-        message: "Character created successfully",
-      });
-    } catch (error) {
-      console.error(error);
-      if (error.code === "ER_DUP_ENTRY") {
-        return res.status(400).json({ error: "Slug already exists" });
-      }
-      res.status(500).json({ error: "Database error" });
+    res.status(201).json({
+      id: result.insertId,
+      message: "Character created successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({ error: "Slug already exists" });
     }
+    res.status(500).json({ error: "Database error" });
   }
-);
+});
 
 // Cập nhật nhân vật (admin only)
-router.put(
-  "/:id",
-  authenticateToken,
-  upload.fields([
-    { name: "image", maxCount: 1 },
-    { name: "audio", maxCount: 1 },
-  ]),
-  async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { name, slug, timeline, summary, content } = req.body;
-      const imageFile = req.files?.image?.[0];
-      const audioFile = req.files?.audio?.[0];
+router.put("/:id", authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, slug, timeline, summary, content, image_url, audio_url } = req.body;
 
-      // Lấy thông tin hiện tại
-      const [current] = await db.query(
-        "SELECT image_url, audio_url FROM characters WHERE id = ?",
-        [id]
-      );
-      if (current.length === 0) {
-        return res.status(404).json({ error: "Character not found" });
-      }
-
-      const imageUrl = imageFile
-        ? `/uploads/${imageFile.filename}`
-        : current[0].image_url;
-      const audioUrl = audioFile
-        ? `/uploads/${audioFile.filename}`
-        : current[0].audio_url;
-
-      await db.query(
-        "UPDATE characters SET name = ?, slug = ?, timeline = ?, image_url = ?, summary = ?, content = ?, audio_url = ? WHERE id = ?",
-        [name, slug, timeline, imageUrl, summary, content, audioUrl, id]
-      );
-
-      res.json({ message: "Character updated successfully" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Database error" });
+    // Kiểm tra nhân vật có tồn tại
+    const [existing] = await db.query("SELECT id FROM characters WHERE id = ?", [id]);
+    if (existing.length === 0) {
+      return res.status(404).json({ error: "Character not found" });
     }
+
+    await db.query(
+      "UPDATE characters SET name = ?, slug = ?, timeline = ?, image_url = ?, summary = ?, content = ?, audio_url = ? WHERE id = ?",
+      [name, slug, timeline, image_url || null, summary, content, audio_url || null, id]
+    );
+
+    res.json({ message: "Character updated successfully" });
+  } catch (error) {
+    console.error(error);
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({ error: "Slug already exists" });
+    }
+    res.status(500).json({ error: "Database error" });
   }
-);
+});
 
 // Xóa nhân vật (admin only)
 router.delete("/:id", authenticateToken, async (req, res) => {

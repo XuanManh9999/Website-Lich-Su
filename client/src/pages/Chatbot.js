@@ -236,7 +236,7 @@ const Chatbot = () => {
                   <div
                     className={`max-w-[80%] rounded-lg p-4 ${
                       message.type === 'user'
-                        ? 'bg-history-red text-white'
+                        ? 'bg-primary text-white'
                         : 'bg-gray-100 text-gray-900'
                     }`}
                   >
@@ -253,7 +253,7 @@ const Chatbot = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Left Column: Suggested Questions */}
             <div>
-              <h3 className="text-lg md:text-xl font-bold text-history-red mb-4">
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-4">
                 Câu hỏi gợi ý
               </h3>
               <ul className="space-y-3">
@@ -261,9 +261,9 @@ const Chatbot = () => {
                   <li key={index}>
                     <button
                       onClick={() => handleSuggestedQuestionClick(q)}
-                      className="text-left text-sm md:text-base text-gray-700 hover:text-history-red transition-colors flex items-start gap-2"
+                      className="text-left text-sm md:text-base text-gray-700 hover:text-primary transition-colors flex items-start gap-2"
                     >
-                      <span className="text-history-red mt-1">•</span>
+                      <span className="text-primary mt-1">•</span>
                       <span>{q}</span>
                     </button>
                   </li>
@@ -273,7 +273,7 @@ const Chatbot = () => {
 
             {/* Middle Column: Popular Topics */}
             <div>
-              <h3 className="text-lg md:text-xl font-bold text-history-red mb-4">
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-4">
                 Chủ đề phổ biến
               </h3>
               <ul className="space-y-3">
@@ -281,9 +281,9 @@ const Chatbot = () => {
                   <li key={index}>
                     <button
                       onClick={() => setQuestion(`Hãy kể về ${topic.toLowerCase()}`)}
-                      className="text-left text-sm md:text-base text-gray-700 hover:text-history-red transition-colors flex items-start gap-2"
+                      className="text-left text-sm md:text-base text-gray-700 hover:text-primary transition-colors flex items-start gap-2"
                     >
-                      <span className="text-history-red mt-1">•</span>
+                      <span className="text-primary mt-1">•</span>
                       <span>{topic}</span>
                     </button>
                   </li>
@@ -293,14 +293,14 @@ const Chatbot = () => {
 
             {/* Right Column: AI Features */}
             <div>
-              <h3 className="text-lg md:text-xl font-bold text-history-red mb-4">
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-4">
                 Tính năng AI
               </h3>
               <ul className="space-y-3">
                 {aiFeatures.map((feature, index) => (
                   <li key={index}>
                     <span className="text-sm md:text-base text-gray-700 flex items-start gap-2">
-                      <span className="text-history-red mt-1">•</span>
+                      <span className="text-primary mt-1">•</span>
                       <span>{feature}</span>
                     </span>
                   </li>

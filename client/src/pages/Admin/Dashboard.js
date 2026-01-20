@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { characterAPI, adminAPI } from '../../services/api';
+import { fileToBase64, validateImage, validateAudio, generateSlug } from '../../utils/fileUtils';
 
 const Dashboard = () => {
   const [characters, setCharacters] = useState([]);
@@ -13,8 +14,8 @@ const Dashboard = () => {
     timeline: '',
     summary: '',
     content: '',
-    image: null,
-    audio: null,
+    image_url: '',
+    audio_url: '',
   });
   const navigate = useNavigate();
 
@@ -47,9 +48,48 @@ const Dashboard = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+  // Handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validation = validateImage(file, 5);
+    if (!validation.valid) {
+      alert(validation.error);
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      const base64 = await fileToBase64(file);
+      setFormData({ ...formData, image_url: base64 });
+    } catch (error) {
+      console.error('Error converting image:', error);
+      alert('Lỗi khi upload ảnh!');
+      e.target.value = '';
+    }
+  };
+
+  // Handle audio upload
+  const handleAudioUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validation = validateAudio(file, 10);
+    if (!validation.valid) {
+      alert(validation.error);
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      const base64 = await fileToBase64(file);
+      setFormData({ ...formData, audio_url: base64 });
+    } catch (error) {
+      console.error('Error converting audio:', error);
+      alert('Lỗi khi upload audio!');
+      e.target.value = '';
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -75,8 +115,8 @@ const Dashboard = () => {
       timeline: character.timeline || '',
       summary: character.summary || '',
       content: character.content || '',
-      image: null,
-      audio: null,
+      image_url: character.image_url || '',
+      audio_url: character.audio_url || '',
     });
     setShowForm(true);
   };
@@ -99,8 +139,8 @@ const Dashboard = () => {
       timeline: '',
       summary: '',
       content: '',
-      image: null,
-      audio: null,
+      image_url: '',
+      audio_url: '',
     });
     setEditingCharacter(null);
     setShowForm(false);
@@ -110,7 +150,7 @@ const Dashboard = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-history-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
         </div>
       </div>
@@ -122,12 +162,12 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-history-red">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">
             Quản Trị Nhân Vật
           </h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
           >
             {showForm ? 'Đóng Form' : 'Thêm Nhân Vật Mới'}
           </button>
@@ -136,7 +176,7 @@ const Dashboard = () => {
         {/* Form */}
         {showForm && (
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-history-red mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-6">
               {editingCharacter ? 'Chỉnh Sửa' : 'Thêm Mới'} Nhân Vật
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -212,29 +252,61 @@ const Dashboard = () => {
                   </label>
                   <input
                     type="file"
-                    name="image"
                     accept="image/*"
-                    onChange={handleFileChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                    onChange={handleImageUpload}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-light"
                   />
+                  {formData.image_url && (
+                    <div className="relative mt-2 w-32 h-32">
+                      <img
+                        src={formData.image_url}
+                        alt="Preview"
+                        className="w-full h-full object-cover rounded-lg shadow-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image_url: '' })}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors shadow-lg"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Audio kể chuyện (MP3)
+                    🎵 Audio kể chuyện
                   </label>
                   <input
                     type="file"
-                    name="audio"
                     accept="audio/*"
-                    onChange={handleFileChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none"
+                    onChange={handleAudioUpload}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-light"
                   />
+                  {formData.audio_url && (
+                    <div className="relative mt-2 p-2 bg-blue-50 rounded-lg">
+                      <audio controls className="w-full">
+                        <source src={formData.audio_url} type="audio/mpeg" />
+                      </audio>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, audio_url: '' })}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors shadow-lg"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="bg-history-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-history-red-light transition-colors"
+                  className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
                 >
                   {editingCharacter ? 'Cập Nhật' : 'Tạo Mới'}
                 </button>
@@ -252,17 +324,17 @@ const Dashboard = () => {
 
         {/* Characters List */}
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-history-red mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary mb-6">
             Danh Sách Nhân Vật ({characters.length})
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">ID</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">Tên</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">Slug</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-history-red">Thao Tác</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-primary">ID</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Tên</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Slug</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Thao Tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -281,7 +353,7 @@ const Dashboard = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(character.id)}
-                          className="bg-red-500 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-red-600 transition-colors"
+                          className="bg-blue-500 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-red-600 transition-colors"
                         >
                           Xóa
                         </button>

@@ -1,0 +1,217 @@
+/* Custom styles for ReactQuill Editor */
+.ql-container {
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+.ql-editor {
+  min-height: 350px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.ql-editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ql-editor::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+  background: #0F4C81;
+  border-radius: 4px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb:hover {
+  background: #1E88E5;
+}
+
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.ql-editor img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ql-toolbar {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6 !important;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 12px !important;
+}
+
+.ql-container {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Primary color customization */
+.ql-snow .ql-stroke {
+  stroke: #0F4C81;
+}
+
+.ql-snow .ql-fill {
+  fill: #0F4C81;
+}
+
+.ql-snow .ql-picker-label:hover,
+.ql-snow .ql-picker-item:hover {
+  color: #0F4C81;
+}
+
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active {
+  color: #0F4C81;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #0F4C81;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-fill {
+  fill: #0F4C81;
+}
+
+.ql-snow .ql-picker-label.ql-active,
+.ql-snow .ql-picker-label:hover {
+  color: #0F4C81;
+}
+
+.ql-snow .ql-picker-label.ql-active .ql-stroke,
+.ql-snow .ql-picker-label:hover .ql-stroke {
+  stroke: #0F4C81;
+}
+
+/* Editor content styling */
+.ql-editor h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 20px 0 16px 0;
+  color: #1a1a1a;
+}
+
+.ql-editor h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 18px 0 14px 0;
+  color: #1a1a1a;
+}
+
+.ql-editor h3 {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin: 16px 0 12px 0;
+  color: #1a1a1a;
+}
+
+.ql-editor p {
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+
+.ql-editor blockquote {
+  border-left: 4px solid #0F4C81;
+  padding-left: 16px;
+  margin: 16px 0;
+  font-style: italic;
+  color: #555;
+  background: #f0f7ff;
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 24px;
+  margin: 12px 0;
+}
+
+.ql-editor li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.ql-editor a {
+  color: #0F4C81;
+  text-decoration: underline;
+}
+
+.ql-editor a:hover {
+  color: #1E88E5;
+}
+
+.ql-editor code {
+  background: #f4f4f4;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.ql-editor pre {
+  background: #282c34;
+  color: #abb2bf;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.ql-editor pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Placeholder styling */
+.ql-editor.ql-blank::before {
+  color: #999;
+  font-style: italic;
+}
+
+/* Focus state */
+.ql-container.ql-snow {
+  border-color: #dee2e6;
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow:focus-within {
+  border-color: #0F4C81;
+  box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ql-toolbar {
+    padding: 8px !important;
+  }
+  
+  .ql-editor {
+    min-height: 250px;
+    padding: 16px;
+  }
+  
+  .ql-toolbar button {
+    width: 28px;
+    height: 28px;
+  }
+}
