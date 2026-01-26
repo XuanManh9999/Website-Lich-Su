@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS posts (
     slug VARCHAR(255) NOT NULL UNIQUE,
     content TEXT,
     image_url VARCHAR(500),
+    audio_url LONGTEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_slug (slug)
@@ -105,6 +106,10 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_email VARCHAR(255),
     customer_phone VARCHAR(50),
     customer_address TEXT,
+    province VARCHAR(255),
+    district VARCHAR(255),
+    ward VARCHAR(255),
+    address_detail VARCHAR(500),
     total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     status VARCHAR(50) DEFAULT 'pending', -- pending, paid, cancelled, refunded
     payment_status VARCHAR(50) DEFAULT 'unpaid', -- unpaid, paid, failed

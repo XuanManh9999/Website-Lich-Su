@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +45,7 @@ const FeaturedProducts = () => {
     <section className="py-12 md:py-16 lg:py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-8 md:mb-12" data-aos="fade-up">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-3 md:mb-4">
             Sản phẩm nổi bật
           </h2>
@@ -85,10 +86,10 @@ const FeaturedProducts = () => {
                     className={`px-5 py-2.5 rounded-full font-medium text-sm md:text-base whitespace-nowrap transition-all ${
                       selectedCategory === category
                         ? 'bg-primary text-white shadow-md'
-                        : 'bg-blue-100 text-primary hover:bg-blue-200'
+                        : 'bg-primary-50 text-primary hover:bg-primary-100'
                     }`}
                   >
-                    {category === 'Flashcard' ? 'Bộ flashcard học lịch sử thú vị' : category}
+                    {category === 'Flashcard' ? 'Bộ Quizlet card học lịch sử thú vị' : category}
                   </button>
                 ))}
               </div>
@@ -119,28 +120,24 @@ const FeaturedProducts = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
-              {products.map((product) => {
+              {products.map((product, index) => {
                 const productSlug = product.slug || `product-${product.id}`;
                 return (
                   <Link
                     key={product.id}
                     to={`/san-pham/${productSlug}`}
                     className="card group"
+                    data-aos="fade-up"
+                    data-aos-delay={index * 100}
                   >
                     {/* Product Image */}
                     <div className="relative h-56 sm:h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                       {product.image_url ? (
                         <img
-                          src={
-                            product.image_url.startsWith('data:') || product.image_url.startsWith('http')
-                              ? product.image_url
-                              : `http://localhost:5000${product.image_url}`
-                          }
+                          src={getSafeImageUrl(product.image_url)}
                           alt={product.name}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                          onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/400x500/0F4C81/FFFFFF?text=Product';
-                          }}
+                          onError={(e) => handleImageError(e)}
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-primary/10">
@@ -158,14 +155,23 @@ const FeaturedProducts = () => {
                       {/* Author/Details */}
                       {product.description && (
                         <div className="text-sm text-gray-600 space-y-1">
-                          {product.description.split('•').slice(0, 3).map((item, idx) => (
+                          {(() => {
+                            // Strip HTML and get plain text
+                            const tmp = document.createElement('DIV');
+                            tmp.innerHTML = product.description;
+                            const plainText = tmp.textContent || tmp.innerText || '';
+                            // Split by bullet points if present, otherwise show first 100 chars
+                            const items = plainText.split('•').filter(item => item.trim());
+                            const displayItems = items.length > 0 ? items.slice(0, 3) : [plainText.substring(0, 100)];
+                            return displayItems.map((item, idx) => (
                             item.trim() && (
                               <p key={idx} className="flex items-start">
-                                {idx > 0 && <span className="mr-2">•</span>}
+                                  {items.length > 0 && idx > 0 && <span className="mr-2">•</span>}
                                 <span className={idx === 0 ? '' : 'ml-1'}>{item.trim()}</span>
                               </p>
                             )
-                          ))}
+                            ));
+                          })()}
                         </div>
                       )}
 
@@ -196,7 +202,7 @@ const FeaturedProducts = () => {
             </div>
 
             {/* View All Button */}
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up" data-aos-delay="300">
               <Link
                 to="/san-pham"
                 className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"

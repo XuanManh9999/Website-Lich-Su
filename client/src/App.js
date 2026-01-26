@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./App.css";
 
 import Navbar from "./components/Navbar";
@@ -16,6 +18,8 @@ import FlashCards from "./pages/FlashCards";
 import QuizDetail from "./pages/QuizDetail";
 import Chatbot from "./pages/Chatbot";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 import PaymentResult from "./pages/PaymentResult";
 import AdminLogin from "./pages/Admin/Login";
 import AdminRegister from "./pages/Admin/Register";
@@ -32,6 +36,15 @@ import ForgotPassword from "./pages/Admin/ForgotPassword";
 import ResetPassword from "./pages/Admin/ResetPassword";
 
 function App() {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
+      mirror: false,
+    });
+  }, []);
+
   return (
     <Router>
       <ScrollToTop />
@@ -50,6 +63,8 @@ function App() {
             <Route path="/quiz/:id" element={<QuizDetail />} />
             <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/gio-hang" element={<Cart />} />
+            <Route path="/thanh-toan" element={<Checkout />} />
+            <Route path="/dat-hang-thanh-cong" element={<OrderSuccess />} />
             <Route path="/payment/result" element={<PaymentResult />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/register" element={<AdminRegister />} />

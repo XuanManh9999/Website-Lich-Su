@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { carouselAPI } from '../services/api';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
 
 const ImageCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -61,23 +62,15 @@ const ImageCarousel = () => {
   };
 
   return (
-    <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl shadow-2xl">
+    <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl shadow-2xl" data-aos="zoom-in">
       {/* Background Image */}
       <div className="absolute inset-0">
         {slides.length > 0 && (
           <img
-            src={
-              slides[currentSlide].image_url
-                ? (slides[currentSlide].image_url.startsWith('data:') || slides[currentSlide].image_url.startsWith('http')
-                    ? slides[currentSlide].image_url
-                    : `http://localhost:5000${slides[currentSlide].image_url}`)
-                : 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Carousel'
-            }
+            src={getSafeImageUrl(slides[currentSlide].image_url)}
             alt={`Slide ${currentSlide + 1}`}
             className="w-full h-full object-cover transition-opacity duration-700"
-            onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Carousel';
-            }}
+            onError={(e) => handleImageError(e)}
           />
         )}
         {/* Overlay gradient */}
@@ -91,7 +84,12 @@ const ImageCarousel = () => {
           <div className="absolute top-0 left-0 right-0 h-[60%] sm:h-[65%] md:h-[70%] bg-gradient-to-b from-amber-50 via-amber-50/95 to-transparent flex items-center justify-center px-4 sm:px-6 md:px-8">
             <div className="text-center max-w-4xl w-full">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary mb-4 md:mb-6 leading-tight uppercase tracking-tight">
-                {slides[currentSlide].quote}
+                <div 
+                  className="prose prose-lg prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ 
+                    __html: slides[currentSlide].quote || '' 
+                  }}
+                />
               </h2>
               <p className="text-lg sm:text-xl md:text-2xl text-primary font-semibold">
                 {slides[currentSlide].author || 'Thiên Sử Ký'}

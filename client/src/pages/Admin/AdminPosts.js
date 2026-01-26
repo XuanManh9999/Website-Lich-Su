@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './AdminPosts.css';
-import { postAPI } from '../../services/api';
+import { postAPI, SERVER_BASE_URL } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
 import Toast from '../../components/Toast';
+import { validateAudio } from '../../utils/fileUtils';
 
 const AdminPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -20,15 +21,19 @@ const AdminPosts = () => {
     slug: '',
     content: '',
     image_url: '',
+    audio_url: '',
   });
+  const [audioFile, setAudioFile] = useState(null);
+  const [audioPreviewUrl, setAudioPreviewUrl] = useState('');
   const quillRef = useRef(null);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  const showToast = (message, type) => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
+  };
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
       const response = await postAPI.getAll();
@@ -39,7 +44,11 @@ const AdminPosts = () => {
       showToast('Lỗi khi tải dữ liệu', 'error');
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const filteredPosts = useMemo(() => {
     let filtered = posts;
@@ -82,8 +91,8 @@ const AdminPosts = () => {
     setFormData({ ...formData, content });
   };
 
-  // Convert image file to base64
-  const imageToBase64 = (file) => {
+  // Convert file to base64
+  const fileToBase64Helper = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -110,7 +119,8 @@ const AdminPosts = () => {
     }
 
     try {
-      const base64 = await imageToBase64(file);
+      showToast('Đang upload ảnh...', 'info');
+      const base64 = await fileToBase64Helper(file);
       setFormData({ ...formData, image_url: base64 });
       showToast('Upload ảnh đại diện thành công!', 'success');
     } catch (error) {
@@ -119,8 +129,35 @@ const AdminPosts = () => {
     }
   };
 
+  // Handle audio upload and convert to base64
+  const handleAudioUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validation = validateAudio(file, 10);
+    if (!validation.valid) {
+      showToast(validation.error, 'error');
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      // Store file for multipart upload on submit
+      setAudioFile(file);
+      const preview = URL.createObjectURL(file);
+      setAudioPreviewUrl(preview);
+      // Clear stored URL (server will generate /uploads/... after submit)
+      setFormData({ ...formData, audio_url: '' });
+      showToast('Đã chọn audio. Bấm "Tạo mới/Cập nhật" để upload lên server.', 'info');
+    } catch (error) {
+      console.error('Error converting audio:', error);
+      showToast('Lỗi khi chọn audio!', 'error');
+      e.target.value = '';
+    }
+  };
+
   // Image handler for ReactQuill editor
-  const imageHandler = () => {
+  const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -144,7 +181,7 @@ const AdminPosts = () => {
 
       try {
         showToast('Đang upload ảnh...', 'info');
-        const base64 = await imageToBase64(file);
+        const base64 = await fileToBase64Helper(file);
         
         // Get Quill editor instance
         const quill = quillRef.current.getEditor();
@@ -160,7 +197,7 @@ const AdminPosts = () => {
         showToast('Lỗi khi upload ảnh!', 'error');
       }
     };
-  };
+  }, []);
 
   // ReactQuill modules configuration
   const modules = useMemo(
@@ -216,11 +253,15 @@ const AdminPosts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const submitData = {
+        ...formData,
+        audio: audioFile || null,
+      };
       if (editingPost) {
-        await postAPI.update(editingPost.id, formData);
+        await postAPI.update(editingPost.id, submitData);
         showToast('Cập nhật bài viết thành công!', 'success');
       } else {
-        await postAPI.create(formData);
+        await postAPI.create(submitData);
         showToast('Tạo bài viết mới thành công!', 'success');
       }
       fetchPosts();
@@ -237,7 +278,10 @@ const AdminPosts = () => {
       slug: post.slug || '',
       content: post.content || '',
       image_url: post.image_url || '',
+      audio_url: post.audio_url || '',
     });
+    setAudioFile(null);
+    setAudioPreviewUrl('');
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -263,14 +307,12 @@ const AdminPosts = () => {
       slug: '',
       content: '',
       image_url: '',
+      audio_url: '',
     });
+    setAudioFile(null);
+    setAudioPreviewUrl('');
     setEditingPost(null);
     setShowForm(false);
-  };
-
-  const showToast = (message, type) => {
-    setToast({ isVisible: true, message, type });
-    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
   };
 
   const columns = [
@@ -403,6 +445,56 @@ const AdminPosts = () => {
                   )}
                   <p className="text-xs text-gray-500">
                     💡 Tip: Upload ảnh trực tiếp (tự động chuyển sang base64). Tối đa 5MB.
+                  </p>
+                </div>
+              </div>
+
+              {/* Audio Upload */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  🎵 Audio đọc bài viết
+                </label>
+                <div className="flex flex-col gap-4">
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={handleAudioUpload}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-light"
+                  />
+                  {(audioPreviewUrl || formData.audio_url) && (
+                    <div className="relative p-4 bg-blue-50 rounded-lg">
+                      <audio controls className="w-full">
+                        <source 
+                          src={
+                            audioPreviewUrl 
+                              ? audioPreviewUrl 
+                              : formData.audio_url?.startsWith('data:') || formData.audio_url?.startsWith('http')
+                                ? formData.audio_url
+                                : `${SERVER_BASE_URL}${formData.audio_url}`
+                          } 
+                          type="audio/mpeg" 
+                        />
+                        Trình duyệt không hỗ trợ audio.
+                      </audio>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+                          setAudioPreviewUrl('');
+                          setAudioFile(null);
+                          setFormData({ ...formData, audio_url: '' });
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg"
+                        title="Xóa audio"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    💡 Tip: Upload file audio đọc bài viết (MP3, WAV). Tối đa 10MB. File sẽ được upload vào server (`/uploads`) và DB chỉ lưu link.
                   </p>
                 </div>
               </div>

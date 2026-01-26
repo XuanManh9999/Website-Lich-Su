@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://180.93.52.233:5000/api";
+  process.env.REACT_APP_API_URL || "https://vietsuquan.io.vn/api";
+
+export const SERVER_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -74,8 +76,38 @@ export const postAPI = {
   getAll: () => api.get("/posts"),
   getBySlug: (slug) => api.get(`/posts/slug/${slug}`),
   getById: (id) => api.get(`/posts/${id}`),
-  create: (data) => api.post("/posts", data),
-  update: (id, data) => api.put(`/posts/${id}`, data),
+  create: (data) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("slug", data.slug);
+    formData.append("content", data.content || "");
+    formData.append("image_url", data.image_url || "");
+    // If a new audio file is provided, upload it; otherwise keep existing audio_url (if any)
+    if (data.audio) {
+      formData.append("audio", data.audio);
+    } else if (data.audio_url) {
+      formData.append("audio_url", data.audio_url);
+    }
+    return api.post("/posts", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+  update: (id, data) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("slug", data.slug);
+    formData.append("content", data.content || "");
+    formData.append("image_url", data.image_url || "");
+    // If a new audio file is provided, upload it; otherwise keep existing audio_url (if any)
+    if (data.audio) {
+      formData.append("audio", data.audio);
+    } else if (data.audio_url) {
+      formData.append("audio_url", data.audio_url);
+    }
+    return api.put(`/posts/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
   delete: (id) => api.delete(`/posts/${id}`),
 };
 

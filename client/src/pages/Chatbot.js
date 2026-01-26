@@ -167,7 +167,7 @@ const Chatbot = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-6xl">
         {/* Main Interactive Section */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 md:p-8 lg:p-10 mb-8">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 md:p-8 lg:p-10 mb-8" data-aos="fade-up">
           {/* Heading */}
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
             Chọn chế độ tương tác:
@@ -175,7 +175,7 @@ const Chatbot = () => {
 
           {/* Interaction Mode Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8">
-            {interactionModes.map((mode) => {
+            {interactionModes.map((mode, index) => {
               const colors = getModeColors(mode.color);
               const isSelected = selectedMode === mode.id;
 
@@ -183,6 +183,8 @@ const Chatbot = () => {
                 <button
                   key={mode.id}
                   onClick={() => setSelectedMode(mode.id)}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
                   className={`${colors.bg} ${colors.border} border-2 rounded-lg p-4 md:p-6 text-left transition-all ${
                     isSelected ? 'ring-2 ring-offset-2 ring-current' : ''
                   } ${colors.hover} transition-all`}
@@ -249,10 +251,10 @@ const Chatbot = () => {
         </div>
 
         {/* Bottom Panel - Supplementary Information */}
-        <div className="bg-pink-50 rounded-2xl shadow-lg p-6 md:p-8 lg:p-10">
+        <div className="bg-pink-50 rounded-2xl shadow-lg p-6 md:p-8 lg:p-10" data-aos="fade-up" data-aos-delay="200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Left Column: Suggested Questions */}
-            <div>
+            <div data-aos="fade-up" data-aos-delay="300">
               <h3 className="text-lg md:text-xl font-bold text-primary mb-4">
                 Câu hỏi gợi ý
               </h3>
@@ -272,7 +274,7 @@ const Chatbot = () => {
             </div>
 
             {/* Middle Column: Popular Topics */}
-            <div>
+            <div data-aos="fade-up" data-aos-delay="400">
               <h3 className="text-lg md:text-xl font-bold text-primary mb-4">
                 Chủ đề phổ biến
               </h3>
@@ -292,7 +294,7 @@ const Chatbot = () => {
             </div>
 
             {/* Right Column: AI Features */}
-            <div>
+            <div data-aos="fade-up" data-aos-delay="500">
               <h3 className="text-lg md:text-xl font-bold text-primary mb-4">
                 Tính năng AI
               </h3>

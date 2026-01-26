@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { characterAPI } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
@@ -23,13 +25,16 @@ const AdminCharacters = () => {
     image_url: '',
     audio_url: '',
   });
+  const summaryQuillRef = useRef(null);
+  const contentQuillRef = useRef(null);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchCharacters();
-  }, []);
+  const showToast = (message, type) => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
+  };
 
-  const fetchCharacters = async () => {
+  const fetchCharacters = useCallback(async () => {
     try {
       setLoading(true);
       const response = await characterAPI.getAll();
@@ -40,7 +45,11 @@ const AdminCharacters = () => {
       showToast('Lỗi khi tải dữ liệu', 'error');
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchCharacters();
+  }, [fetchCharacters]);
 
   const filteredCharacters = useMemo(() => {
     let filtered = characters;
@@ -91,6 +100,185 @@ const AdminCharacters = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleSummaryChange = (content) => {
+    setFormData({ ...formData, summary: content });
+  };
+
+  const handleContentChange = (content) => {
+    setFormData({ ...formData, content });
+  };
+
+  // Convert image file to base64
+  const imageToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Image handler for ReactQuill editor (summary)
+  const summaryImageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('Vui lòng chọn file ảnh!', 'error');
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('Ảnh trong giới thiệu không được vượt quá 2MB!', 'error');
+        return;
+      }
+
+      try {
+        showToast('Đang upload ảnh...', 'info');
+        const base64 = await imageToBase64(file);
+        
+        const quill = summaryQuillRef.current.getEditor();
+        const range = quill.getSelection();
+        
+        quill.insertEmbed(range.index, 'image', base64);
+        quill.setSelection(range.index + 1);
+        
+        showToast('Upload ảnh vào giới thiệu thành công!', 'success');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        showToast('Lỗi khi upload ảnh!', 'error');
+      }
+    };
+  }, []);
+
+  // Image handler for ReactQuill editor (content)
+  const contentImageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('Vui lòng chọn file ảnh!', 'error');
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('Ảnh trong nội dung không được vượt quá 2MB!', 'error');
+        return;
+      }
+
+      try {
+        showToast('Đang upload ảnh...', 'info');
+        const base64 = await imageToBase64(file);
+        
+        const quill = contentQuillRef.current.getEditor();
+        const range = quill.getSelection();
+        
+        quill.insertEmbed(range.index, 'image', base64);
+        quill.setSelection(range.index + 1);
+        
+        showToast('Upload ảnh vào nội dung thành công!', 'success');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        showToast('Lỗi khi upload ảnh!', 'error');
+      }
+    };
+  }, []);
+
+  // ReactQuill modules configuration
+  const summaryModules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image'],
+          ['clean'],
+        ],
+        handlers: {
+          image: summaryImageHandler,
+        },
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    }),
+    [summaryImageHandler]
+  );
+
+  const contentModules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          [{ font: [] }],
+          [{ size: ['small', false, 'large', 'huge'] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ script: 'sub' }, { script: 'super' }],
+          ['blockquote', 'code-block'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ indent: '-1' }, { indent: '+1' }],
+          [{ align: [] }],
+          ['link', 'image', 'video'],
+          ['clean'],
+        ],
+        handlers: {
+          image: contentImageHandler,
+        },
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    }),
+    [contentImageHandler]
+  );
+
+  const summaryFormats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'list',
+    'bullet',
+    'link',
+    'image',
+  ];
+
+  const contentFormats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'color',
+    'background',
+    'script',
+    'blockquote',
+    'code-block',
+    'list',
+    'bullet',
+    'indent',
+    'align',
+    'link',
+    'image',
+    'video',
+  ];
 
   // Handle image upload and convert to base64
   const handleImageUpload = async (e) => {
@@ -201,11 +389,6 @@ const AdminCharacters = () => {
     setShowForm(false);
   };
 
-  const showToast = (message, type) => {
-    setToast({ isVisible: true, message, type });
-    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
-  };
-
   const columns = [
     { key: 'id', label: 'ID' },
     { key: 'name', label: 'Tên' },
@@ -312,25 +495,41 @@ const AdminCharacters = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Giới thiệu ngắn
                 </label>
-                <textarea
-                  name="summary"
-                  value={formData.summary}
-                  onChange={handleInputChange}
-                  rows="3"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-y transition-all"
-                />
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    ref={summaryQuillRef}
+                    theme="snow"
+                    value={formData.summary}
+                    onChange={handleSummaryChange}
+                    modules={summaryModules}
+                    formats={summaryFormats}
+                    placeholder="Viết giới thiệu ngắn về nhân vật..."
+                    style={{ minHeight: '150px' }}
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  💡 Tip: Ảnh trong giới thiệu sẽ tự động được lưu dưới dạng base64. Tối đa 2MB/ảnh.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Nội dung chi tiết
                 </label>
-                <textarea
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  rows="10"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-y transition-all"
-                />
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    ref={contentQuillRef}
+                    theme="snow"
+                    value={formData.content}
+                    onChange={handleContentChange}
+                    modules={contentModules}
+                    formats={contentFormats}
+                    placeholder="Viết nội dung chi tiết về nhân vật tại đây... Bạn có thể thêm ảnh bằng cách nhấn vào icon hình ảnh trên thanh công cụ."
+                    style={{ minHeight: '350px' }}
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  💡 Tip: Ảnh trong nội dung sẽ tự động được lưu dưới dạng base64. Tối đa 2MB/ảnh.
+                </p>
               </div>
 
               {/* Image Upload */}

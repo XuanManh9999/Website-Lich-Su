@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { postAPI } from '../services/api';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
 
 const FeaturedBlogPosts = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -53,7 +54,7 @@ const FeaturedBlogPosts = () => {
     <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-8 md:mb-12" data-aos="fade-up">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-3 md:mb-4">
             Blog lịch sử
           </h2>
@@ -68,7 +69,7 @@ const FeaturedBlogPosts = () => {
               className={`px-6 py-2.5 rounded-lg font-semibold text-sm md:text-base transition-all ${
                 selectedCategory === 'Tất cả'
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-blue-100 text-primary hover:bg-blue-200'
+                  : 'bg-primary-50 text-primary hover:bg-primary-100'
               }`}
             >
               Tất cả
@@ -78,7 +79,7 @@ const FeaturedBlogPosts = () => {
               className={`px-6 py-2.5 rounded-lg font-semibold text-sm md:text-base transition-all ${
                 selectedCategory === 'Blog'
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-blue-100 text-primary hover:bg-blue-200'
+                  : 'bg-primary-50 text-primary hover:bg-primary-100'
               }`}
             >
               Blog
@@ -99,22 +100,22 @@ const FeaturedBlogPosts = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
-              {posts.map((post) => (
+              {posts.map((post, index) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
                   className="card group"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
                 >
                   {/* Post Image */}
                   <div className="relative h-48 sm:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                     {post.image_url ? (
                       <img
-                        src={post.image_url.startsWith('data:') || post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`}
+                        src={getSafeImageUrl(post.image_url)}
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
-                        }}
+                        onError={(e) => handleImageError(e)}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-primary/10">
@@ -192,7 +193,7 @@ const FeaturedBlogPosts = () => {
             </div>
 
             {/* View All Button */}
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up" data-aos-delay="300">
               <Link
                 to="/blog"
                 className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"

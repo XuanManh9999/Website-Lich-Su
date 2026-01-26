@@ -29,6 +29,21 @@ async function updateColumnsForBase64() {
     await connection.query('ALTER TABLE posts MODIFY COLUMN content LONGTEXT');
     console.log('✅ posts.content updated');
 
+    // Ensure posts.audio_url exists and is LONGTEXT (for uploaded audio link)
+    console.log('Ensuring posts.audio_url exists and is LONGTEXT...');
+    try {
+      await connection.query('ALTER TABLE posts ADD COLUMN audio_url LONGTEXT NULL AFTER image_url');
+      console.log('✅ posts.audio_url added');
+    } catch (e) {
+      if (e.code === 'ER_DUP_FIELDNAME') {
+        console.log('ℹ️ posts.audio_url already exists');
+      } else {
+        throw e;
+      }
+    }
+    await connection.query('ALTER TABLE posts MODIFY COLUMN audio_url LONGTEXT');
+    console.log('✅ posts.audio_url updated');
+
     // Update characters table
     console.log('Updating characters.image_url to LONGTEXT...');
     await connection.query('ALTER TABLE characters MODIFY COLUMN image_url LONGTEXT');

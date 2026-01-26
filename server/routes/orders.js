@@ -98,6 +98,10 @@ router.post('/', async (req, res) => {
       customer_email,
       customer_phone,
       customer_address,
+      province,
+      district,
+      ward,
+      address_detail,
       items,
       total_amount,
       payment_method = 'vnpay',
@@ -107,14 +111,55 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Order ID and items are required' });
     }
 
-    // Create order
-    const [orderResult] = await db.query(
-      `INSERT INTO orders (order_id, customer_name, customer_email, customer_phone, customer_address, total_amount, payment_method, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`,
-      [order_id, customer_name || null, customer_email || null, customer_phone || null, customer_address || null, total_amount || 0, payment_method]
-    );
-
-    const orderId = orderResult.insertId;
+    // Try to create order with address columns first, fallback to basic if needed
+    let orderResult;
+    let orderId;
+    
+    try {
+      // Try with all address columns
+      const [result] = await db.query(
+        `INSERT INTO orders (order_id, customer_name, customer_email, customer_phone, customer_address, province, district, ward, address_detail, total_amount, payment_method, status, payment_status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'unpaid')`,
+        [
+          order_id,
+          customer_name || null,
+          customer_email || null,
+          customer_phone || null,
+          customer_address || null,
+          province || null,
+          district || null,
+          ward || null,
+          address_detail || null,
+          total_amount || 0,
+          payment_method
+        ]
+      );
+      orderResult = result;
+      orderId = result.insertId;
+    } catch (insertError) {
+      // If error is about missing columns, try without address columns
+      if (insertError.code === 'ER_BAD_FIELD_ERROR') {
+        console.log('Address columns not found, using basic insert...');
+        const [result] = await db.query(
+          `INSERT INTO orders (order_id, customer_name, customer_email, customer_phone, customer_address, total_amount, payment_method, status, payment_status)
+           VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', 'unpaid')`,
+          [
+            order_id,
+            customer_name || null,
+            customer_email || null,
+            customer_phone || null,
+            customer_address || null,
+            total_amount || 0,
+            payment_method
+          ]
+        );
+        orderResult = result;
+        orderId = result.insertId;
+      } else {
+        // Re-throw if it's a different error
+        throw insertError;
+      }
+    }
 
     // Create order items
     for (const item of items) {
@@ -135,11 +180,29 @@ router.post('/', async (req, res) => {
 
     res.status(201).json({ id: orderId, message: 'Order created successfully' });
   } catch (error) {
-    console.error(error);
+    console.error('Error creating order:', error);
+    console.error('Error details:', {
+      code: error.code,
+      sqlMessage: error.sqlMessage,
+      sql: error.sql,
+      errno: error.errno
+    });
+    
     if (error.code === 'ER_DUP_ENTRY') {
       return res.status(400).json({ error: 'Order ID already exists' });
     }
-    res.status(500).json({ error: 'Database error' });
+    
+    if (error.code === 'ER_BAD_FIELD_ERROR') {
+      return res.status(500).json({ 
+        error: 'Lỗi khi lưu đơn hàng vào database. Vui lòng chạy migration script để cập nhật database.',
+        details: error.sqlMessage 
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Lỗi khi lưu đơn hàng vào database',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

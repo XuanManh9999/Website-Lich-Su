@@ -77,7 +77,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/quiz" className="text-white/90 hover:text-white transition-colors">
-                  Flash Card
+                  Quizlet card
                 </Link>
               </li>
               <li>
@@ -109,7 +109,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/quiz" className="text-white/90 hover:text-white transition-colors">
-                  Flash Card
+                  Quizlet card
                 </Link>
               </li>
             </ul>

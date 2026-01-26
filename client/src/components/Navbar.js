@@ -81,7 +81,7 @@ const Navbar = () => {
                 location.pathname === '/quiz' ? 'text-white' : 'hover:text-white/80'
               }`}
             >
-              Flash Card
+              Quizlet card
             </Link>
             <Link 
               to="/chatbot" 
@@ -181,7 +181,7 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
               className="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors"
             >
-              Flash Card
+              Quizlet card
             </Link>
             <Link 
               to="/chatbot" 

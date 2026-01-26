@@ -14,7 +14,7 @@ const Home = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left Content */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6" data-aos="fade-right">
               <h1 className="flex flex-col gap-2">
                 <span className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight">
                   Khám phá
@@ -46,7 +46,7 @@ const Home = () => {
             </div>
 
             {/* Right Stats */}
-            <div className="flex flex-col gap-8 lg:gap-10">
+            <div className="flex flex-col gap-8 lg:gap-10" data-aos="fade-left">
               <div className="flex items-center gap-4">
                 <div className="text-5xl sm:text-6xl">📚</div>
                 <div>
@@ -77,7 +77,7 @@ const Home = () => {
       </section>
 
       {/* Image Carousel Section */}
-      <section className="py-8 md:py-12 lg:py-16">
+      <section className="py-8 md:py-12 lg:py-16" data-aos="fade-up">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <ImageCarousel />
         </div>

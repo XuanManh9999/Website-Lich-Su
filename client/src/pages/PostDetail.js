@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { postAPI } from '../services/api';
+import AudioPlayer from '../components/AudioPlayer';
+import { SERVER_BASE_URL } from '../services/api';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
 import '../styles/prose.css';
 
 const PostDetail = () => {
@@ -80,9 +83,7 @@ const PostDetail = () => {
     );
   }
 
-  const imageUrl = post.image_url 
-    ? (post.image_url.startsWith('data:') || post.image_url.startsWith('http') ? post.image_url : `http://localhost:5000${post.image_url}`)
-    : 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Blog';
+  const imageUrl = getSafeImageUrl(post.image_url);
 
   // Calculate reading time (approximate: 200 words per minute)
   const calculateReadingTime = (content) => {
@@ -121,16 +122,16 @@ const PostDetail = () => {
         </button>
 
         {/* Blog Post */}
-        <article className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <article className="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
           {/* Tag */}
-          <div className="px-6 md:px-8 pt-6 md:pt-8">
+          <div className="px-6 md:px-8 pt-6 md:pt-8" data-aos="fade-up" data-aos-delay="100">
             <span className="inline-block bg-blue-100 text-primary px-3 py-1 rounded-full text-sm font-semibold">
               Blog
             </span>
           </div>
 
           {/* Header */}
-          <header className="px-6 md:px-8 pt-4">
+          <header className="px-6 md:px-8 pt-4" data-aos="fade-up" data-aos-delay="200">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               {post.title}
             </h1>
@@ -164,19 +165,33 @@ const PostDetail = () => {
           </header>
 
           {/* Featured Image */}
-          <div className="w-full h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+          <div className="w-full h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200" data-aos="zoom-in" data-aos-delay="300">
             <img
               src={imageUrl}
               alt={post.title}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.src = 'https://via.placeholder.com/1200x600/0F4C81/FFFFFF?text=Blog';
-              }}
+              onError={(e) => handleImageError(e)}
             />
           </div>
 
+          {/* Audio Player */}
+          {post.audio_url && post.audio_url.trim() && (
+            <div className="px-6 md:px-8 pt-6 md:pt-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4">
+                🎵 Nghe đọc bài viết
+              </h2>
+              <AudioPlayer 
+                audioUrl={
+                  post.audio_url.startsWith('data:') || post.audio_url.startsWith('http') 
+                    ? post.audio_url 
+                    : `${SERVER_BASE_URL}${post.audio_url}`
+                } 
+              />
+            </div>
+          )}
+
           {/* Content */}
-          <div className="px-6 md:px-8 py-8 md:py-12">
+          <div className="px-6 md:px-8 py-8 md:py-12" data-aos="fade-up" data-aos-delay="500">
             <div 
               className="prose prose-lg prose-primary max-w-none"
               dangerouslySetInnerHTML={{ 
@@ -188,15 +203,13 @@ const PostDetail = () => {
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <section className="mt-12 md:mt-16">
+          <section className="mt-12 md:mt-16" data-aos="fade-up">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-8 text-center">
               Bài viết liên quan
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {relatedPosts.map((relatedPost) => {
-                const relatedImageUrl = relatedPost.image_url 
-                  ? (relatedPost.image_url.startsWith('data:') || relatedPost.image_url.startsWith('http') ? relatedPost.image_url : `http://localhost:5000${relatedPost.image_url}`)
-                  : 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
+              {relatedPosts.map((relatedPost, index) => {
+                const relatedImageUrl = getSafeImageUrl(relatedPost.image_url);
                 
                 const relatedReadingTime = (() => {
                   if (!relatedPost.content) return '5';
@@ -219,6 +232,8 @@ const PostDetail = () => {
                     key={relatedPost.id}
                     to={`/blog/${relatedPost.slug}`}
                     className="card group block"
+                    data-aos="fade-up"
+                    data-aos-delay={index * 100}
                   >
                     {/* Image */}
                     <div className="relative w-full h-48 sm:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
@@ -226,9 +241,7 @@ const PostDetail = () => {
                         src={relatedImageUrl}
                         alt={relatedPost.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x300/0F4C81/FFFFFF?text=Blog';
-                        }}
+                        onError={(e) => handleImageError(e)}
                       />
                     </div>
 

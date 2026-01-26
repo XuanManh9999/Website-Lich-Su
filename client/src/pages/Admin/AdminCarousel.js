@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { carouselAPI } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
@@ -20,13 +22,15 @@ const AdminCarousel = () => {
     is_active: true,
     image_url: '',
   });
+  const quillRef = useRef(null);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchSlides();
-  }, []);
+  const showToast = (message, type) => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
+  };
 
-  const fetchSlides = async () => {
+  const fetchSlides = useCallback(async () => {
     try {
       setLoading(true);
       const response = await carouselAPI.getAllForAdmin();
@@ -37,7 +41,11 @@ const AdminCarousel = () => {
       showToast('Lỗi khi tải dữ liệu', 'error');
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchSlides();
+  }, [fetchSlides]);
 
   const filteredSlides = useMemo(() => {
     let filtered = slides;
@@ -77,6 +85,36 @@ const AdminCarousel = () => {
       [name]: type === 'checkbox' ? checked : type === 'number' ? parseInt(value) || 0 : value,
     });
   };
+
+  const handleQuoteChange = (content) => {
+    setFormData({ ...formData, quote: content });
+  };
+
+  // ReactQuill modules configuration for quote
+  const quoteModules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ align: [] }],
+          ['clean'],
+        ],
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    }),
+    []
+  );
+
+  const quoteFormats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'align',
+  ];
 
   // Handle image upload and convert to base64
   const handleImageUpload = async (e) => {
@@ -159,11 +197,6 @@ const AdminCarousel = () => {
     setShowForm(false);
   };
 
-  const showToast = (message, type) => {
-    setToast({ isVisible: true, message, type });
-    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
-  };
-
   const columns = [
     { key: 'id', label: 'ID' },
     {
@@ -177,14 +210,14 @@ const AdminCarousel = () => {
       label: 'Ảnh',
       render: (value) => {
         if (!value) return '-';
-        const imageUrl = value.startsWith('http') ? value : `http://localhost:5000${value}`;
+        const imageUrl = value.startsWith('http') ? value : `${process.env.REACT_APP_API_URL?.replace(/\/api\/?$/, '') || 'https://vietsuquan.io.vn'}${value}`;
         return (
           <img
             src={imageUrl}
             alt="Slide"
             className="w-16 h-10 object-cover rounded"
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/64x40/0F4C81/FFFFFF?text=Image';
+              e.target.style.display = 'none';
             }}
           />
         );
@@ -246,15 +279,18 @@ const AdminCarousel = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Câu quote <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  name="quote"
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    ref={quillRef}
+                    theme="snow"
                   value={formData.quote}
-                  onChange={handleInputChange}
-                  required
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                    onChange={handleQuoteChange}
+                    modules={quoteModules}
+                    formats={quoteFormats}
                   placeholder="Nhập câu quote..."
+                    style={{ minHeight: '120px' }}
                 />
+                </div>
               </div>
 
               <div>

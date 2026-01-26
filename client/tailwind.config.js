@@ -6,19 +6,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Màu chính - Xanh dương đậm sang trọng
+        // Màu chính - Đỏ đậm sang trọng
         'primary': {
-          DEFAULT: '#0F4C81',
-          'light': '#1E88E5',
-          'dark': '#0A3A5F',
-          '50': '#E3F2FD',
-          '100': '#BBDEFB',
-          '200': '#90CAF9',
-          '300': '#64B5F6',
-          '400': '#42A5F5',
-          '500': '#0F4C81',
-          '600': '#0A3A5F',
-          '700': '#062947',
+          DEFAULT: '#8F1A1E',
+          'light': '#B83236',
+          'dark': '#6B1316',
+          '50': '#FEE2E2',
+          '100': '#FECACA',
+          '200': '#FCA5A5',
+          '300': '#F87171',
+          '400': '#EF4444',
+          '500': '#8F1A1E',
+          '600': '#6B1316',
+          '700': '#4A0D0F',
         },
         // Màu phụ - Vàng cam ấm áp
         'accent': {
@@ -28,9 +28,9 @@ module.exports = {
         },
         // Giữ lại history-red cho backward compatibility
         'history-red': {
-          DEFAULT: '#0F4C81',
-          'light': '#1E88E5',
-          'dark': '#0A3A5F',
+          DEFAULT: '#8F1A1E',
+          'light': '#B83236',
+          'dark': '#6B1316',
         },
       },
       fontFamily: {

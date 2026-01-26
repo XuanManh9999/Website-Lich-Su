@@ -2,6 +2,15 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import Pagination from '../components/Pagination';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
+
+// Helper function to strip HTML tags for preview
+const stripHtml = (html) => {
+  if (!html) return '';
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -55,7 +64,7 @@ const Products = () => {
   return (
     <div className="w-full min-h-screen bg-gray-50 py-8 md:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-8 md:mb-12" data-aos="fade-up">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
             Sản phẩm
           </h1>
@@ -117,27 +126,23 @@ const Products = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {currentProducts.map((product) => {
+              {currentProducts.map((product, index) => {
                 const productSlug = product.slug || `product-${product.id}`;
                 return (
                   <Link
                     key={product.id}
                     to={`/san-pham/${productSlug}`}
                     className="card group"
+                    data-aos="fade-up"
+                    data-aos-delay={index * 100}
                   >
                   {product.image_url && (
                     <div className="w-full h-56 sm:h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                       <img
-                        src={
-                          product.image_url.startsWith('data:') || product.image_url.startsWith('http')
-                            ? product.image_url
-                            : `http://localhost:5000${product.image_url}`
-                        }
+                        src={getSafeImageUrl(product.image_url)}
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x500/0F4C81/FFFFFF?text=Product';
-                        }}
+                        onError={(e) => handleImageError(e)}
                       />
                     </div>
                   )}
@@ -155,7 +160,7 @@ const Products = () => {
                     )}
                     {product.description && (
                       <p className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-3 flex-1">
-                        {product.description}
+                        {stripHtml(product.description)}
                       </p>
                     )}
                     <Link
@@ -171,11 +176,13 @@ const Products = () => {
             </div>
 
             {/* Pagination */}
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <div data-aos="fade-up" data-aos-delay="300">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </>
         )}
       </div>

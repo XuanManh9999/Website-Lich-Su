@@ -69,12 +69,12 @@ const FlashCards = () => {
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-8 md:mb-12" data-aos="fade-up">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
-            Flash Card học lịch sử
+            Quizlet card học lịch sử
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Học lịch sử hiệu quả với phương pháp flashcard hiện đại, được thiết kế bởi các chuyên gia giáo dục
+            Học lịch sử hiệu quả với phương pháp Quizlet card hiện đại, được thiết kế bởi các chuyên gia giáo dục
           </p>
         </div>
 
@@ -85,12 +85,12 @@ const FlashCards = () => {
           </div>
         ) : flashcardSets.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-gray-600 text-lg">Chưa có bộ flashcard nào.</p>
+            <p className="text-gray-600 text-lg">Chưa có bộ Quizlet card nào.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {flashcardSets.map((set) => (
-              <div key={set.id} className="card group">
+            {flashcardSets.map((set, index) => (
+              <div key={set.id} className="card group" data-aos="fade-up" data-aos-delay={index * 100}>
                 {/* Content */}
                 <div className="p-6 md:p-8 flex flex-col h-full">
                   {/* Title with Star */}

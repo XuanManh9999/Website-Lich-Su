@@ -81,12 +81,12 @@ const FeaturedFlashcards = () => {
     <section className="py-12 md:py-16 lg:py-20 bg-pink-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-8 md:mb-12" data-aos="fade-up">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-3 md:mb-4">
-            Flash Card học lịch sử
+            Quizlet card học lịch sử
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Học lịch sử hiệu quả với phương pháp flashcard hiện đại, được thiết kế bởi các chuyên gia giáo dục
+            Học lịch sử hiệu quả với phương pháp Quizlet card hiện đại, được thiết kế bởi các chuyên gia giáo dục
           </p>
         </div>
 
@@ -103,10 +103,12 @@ const FeaturedFlashcards = () => {
         ) : (
           <>
             <div className="space-y-4 md:space-y-6 mb-8 md:mb-12">
-              {flashcards.map((flashcard) => (
+              {flashcards.map((flashcard, index) => (
                 <div
                   key={flashcard.id}
                   className="bg-white rounded-2xl shadow-lg p-6 md:p-8 hover:shadow-xl transition-shadow duration-300"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
                 >
                   <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
                     {/* Left: Content */}
@@ -142,7 +144,7 @@ const FeaturedFlashcards = () => {
                       {/* Stats */}
                       <div className="flex gap-3 md:flex-col md:gap-3 w-full md:w-auto">
                         {/* Cards Count */}
-                        <div className="bg-blue-100 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
+                        <div className="bg-primary-50 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
                           <svg
                             className="w-6 h-6 text-primary mb-1 md:mb-0"
                             fill="none"
@@ -165,7 +167,7 @@ const FeaturedFlashcards = () => {
                         </div>
 
                         {/* Study Time */}
-                        <div className="bg-blue-100 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
+                        <div className="bg-primary-50 rounded-lg p-3 flex flex-col items-center md:flex-row md:gap-3 flex-1 md:flex-initial min-w-[100px]">
                           <svg
                             className="w-6 h-6 text-primary mb-1 md:mb-0"
                             fill="none"
@@ -215,12 +217,12 @@ const FeaturedFlashcards = () => {
             </div>
 
             {/* View All Button */}
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up" data-aos-delay="300">
               <Link
                 to="/quiz"
                 className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
               >
-                Xem tất cả bộ flashcard
+                Xem tất cả bộ Quizlet card
               </Link>
             </div>
           </>

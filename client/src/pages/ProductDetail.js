@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import { addToCart } from '../utils/cart';
 import Toast from '../components/Toast';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -99,11 +100,7 @@ const ProductDetail = () => {
     );
   }
 
-  const imageUrl = product.image_url 
-    ? (product.image_url.startsWith('data:') || product.image_url.startsWith('http') 
-        ? product.image_url 
-        : `http://localhost:5000${product.image_url}`)
-    : 'https://via.placeholder.com/500x700/0F4C81/FFFFFF?text=Product';
+  const imageUrl = getSafeImageUrl(product.image_url);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12">
@@ -126,26 +123,24 @@ const ProductDetail = () => {
         </button>
 
         {/* Product Detail Card */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 md:p-8 lg:p-12">
             {/* Left: Product Image */}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center" data-aos="zoom-in" data-aos-delay="200">
               <div className="w-full max-w-md">
                 <div className="relative aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden">
                   <img
                     src={imageUrl}
                     alt={product.name}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/500x700/0F4C81/FFFFFF?text=Product';
-                    }}
+                    onError={(e) => handleImageError(e)}
                   />
                 </div>
               </div>
             </div>
 
             {/* Right: Product Info */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6" data-aos="fade-left" data-aos-delay="300">
               {/* Title */}
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary">
                 {product.name}
@@ -212,24 +207,12 @@ const ProductDetail = () => {
               {/* Product Description */}
               <div className="pt-4 border-t border-gray-200">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Mô tả sản phẩm</h2>
-                <div className="text-gray-700 leading-relaxed whitespace-pre-line space-y-2">
-                  {product.description ? (
-                    product.description.split('\n').map((line, idx) => {
-                      // Format lines that start with bullet points
-                      if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
-                        return (
-                          <p key={idx} className="flex items-start">
-                            <span className="mr-2">{line.trim().startsWith('•') ? '•' : '-'}</span>
-                            <span>{line.trim().substring(1).trim()}</span>
-                          </p>
-                        );
-                      }
-                      return <p key={idx}>{line}</p>;
-                    })
-                  ) : (
-                    <p>Chưa có mô tả cho sản phẩm này.</p>
-                  )}
-                </div>
+                <div 
+                  className="prose prose-lg prose-primary max-w-none text-gray-700"
+                  dangerouslySetInnerHTML={{ 
+                    __html: product.description || '<p>Chưa có mô tả cho sản phẩm này.</p>' 
+                  }}
+                />
               </div>
             </div>
           </div>

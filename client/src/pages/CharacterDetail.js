@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { characterAPI } from '../services/api';
+import { characterAPI, SERVER_BASE_URL } from '../services/api';
+import { getSafeImageUrl } from '../utils/imageUtils';
 import AudioPlayer from '../components/AudioPlayer';
 
 const CharacterDetail = () => {
@@ -46,18 +47,18 @@ const CharacterDetail = () => {
   }
 
   const audioUrl = character.audio_url 
-    ? `http://localhost:5000${character.audio_url}`
+    ? `${SERVER_BASE_URL}${character.audio_url}`
     : null;
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
           {/* Image */}
           {character.image_url && (
-            <div className="w-full h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="w-full h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200" data-aos="zoom-in">
               <img
-                src={`http://localhost:5000${character.image_url}`}
+                src={getSafeImageUrl(character.image_url)}
                 alt={character.name}
                 className="w-full h-full object-cover"
               />
@@ -80,19 +81,22 @@ const CharacterDetail = () => {
 
             {/* Summary */}
             {character.summary && (
-              <section className="mb-8">
+              <section className="mb-8" data-aos="fade-up" data-aos-delay="300">
                 <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">
                   Giới Thiệu
                 </h2>
-                <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                  {character.summary}
-                </p>
+                <div 
+                  className="prose prose-lg prose-primary max-w-none text-base sm:text-lg text-gray-700 leading-relaxed"
+                  dangerouslySetInnerHTML={{ 
+                    __html: character.summary || '' 
+                  }}
+                />
               </section>
             )}
 
             {/* Audio */}
             {audioUrl && (
-              <section className="mb-8">
+              <section className="mb-8" data-aos="fade-up" data-aos-delay="400">
                 <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">
                   Nghe Kể Chuyện
                 </h2>
@@ -102,14 +106,14 @@ const CharacterDetail = () => {
 
             {/* Content */}
             {character.content && (
-              <section>
+              <section data-aos="fade-up" data-aos-delay="500">
                 <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">
                   Chi Tiết
                 </h2>
                 <div
-                  className="text-base sm:text-lg text-gray-700 leading-relaxed prose prose-lg max-w-none"
+                  className="prose prose-lg prose-primary max-w-none text-base sm:text-lg text-gray-700 leading-relaxed"
                   dangerouslySetInnerHTML={{ 
-                    __html: character.content.replace(/\n/g, '<br />') 
+                    __html: character.content || '' 
                   }}
                 />
               </section>

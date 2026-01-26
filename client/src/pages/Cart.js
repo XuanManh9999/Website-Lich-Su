@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCart, removeFromCart, updateCartQuantity, getCartTotal, clearCart } from '../utils/cart';
-import { paymentAPI } from '../services/api';
+import { handleImageError, getSafeImageUrl } from '../utils/imageUtils';
 
 const Cart = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
-  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     loadCart();
@@ -38,66 +37,19 @@ const Cart = () => {
     }
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (cartItems.length === 0 || cartTotal === 0) return;
-
-    setProcessing(true);
-
-    try {
-      // Generate order ID (alphanumeric only, max 100 chars for VNPay)
-      const timestamp = Date.now();
-      const randomStr = Math.random().toString(36).substring(2, 11).replace(/[^a-zA-Z0-9]/g, '');
-      const orderId = `ORDER${timestamp}${randomStr}`.substring(0, 100);
-      const orderDescription = `Thanh toan don hang ${cartItems.length} san pham`;
-      
-      // Prepare order items for database
-      const orderItems = cartItems.map(item => ({
-        product_id: item.id,
-        product_name: item.name,
-        product_slug: item.slug,
-        quantity: item.quantity,
-        price: item.price,
-      }));
-
-      // Customer info (you can add a form to collect this later)
-      const customerInfo = {
-        name: 'Khách hàng',
-        email: '',
-        phone: '',
-        address: '',
-      };
-
-      const response = await paymentAPI.createPayment({
-        amount: cartTotal,
-        orderDescription,
-        orderType: 'other',
-        orderId,
-        customerInfo,
-        items: orderItems,
-      });
-
-      if (response.data.paymentUrl) {
-        // Redirect to VNPay payment page
-        window.location.href = response.data.paymentUrl;
-      } else {
-        alert('Lỗi khi tạo link thanh toán');
-        setProcessing(false);
-      }
-    } catch (error) {
-      console.error('Payment error:', error);
-      alert('Đã xảy ra lỗi khi thanh toán. Vui lòng thử lại.');
-      setProcessing(false);
-    }
+    navigate('/thanh-toan');
   };
 
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center mb-12" data-aos="fade-up">
             Giỏ Hàng
           </h1>
-          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center">
+          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center" data-aos="fade-up" data-aos-delay="200">
             <div className="text-6xl mb-6">🛒</div>
             <p className="text-xl text-gray-600 mb-8">Giỏ hàng của bạn đang trống.</p>
             <Link
@@ -132,15 +84,11 @@ const Cart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cartItems.map((item) => {
-              const imageUrl = item.image_url
-                ? (item.image_url.startsWith('data:') || item.image_url.startsWith('http')
-                    ? item.image_url 
-                    : `http://localhost:5000${item.image_url}`)
-                : 'https://via.placeholder.com/150x200/0F4C81/FFFFFF?text=Product';
+            {cartItems.map((item, index) => {
+              const imageUrl = getSafeImageUrl(item.image_url);
 
               return (
-                <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay={index * 100}>
                   <div className="flex flex-col sm:flex-row gap-4 p-4 md:p-6">
                     {/* Product Image */}
                     <Link
@@ -151,9 +99,7 @@ const Cart = () => {
                         src={imageUrl}
                         alt={item.name}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/150x200/0F4C81/FFFFFF?text=Product';
-                        }}
+                        onError={(e) => handleImageError(e)}
                       />
                     </Link>
 
@@ -255,10 +201,10 @@ const Cart = () => {
               <div className="space-y-3">
                 <button
                   onClick={handleCheckout}
-                  disabled={processing || cartItems.length === 0}
+                  disabled={cartItems.length === 0}
                   className="w-full bg-primary text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {processing ? 'Đang xử lý...' : 'Thanh toán'}
+                  Thanh toán
                 </button>
                 <Link
                   to="/san-pham"

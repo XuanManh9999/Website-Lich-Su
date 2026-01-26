@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { productAPI } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
@@ -20,13 +22,15 @@ const AdminProducts = () => {
     price: '',
     image_url: '',
   });
+  const quillRef = useRef(null);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const showToast = (message, type) => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
+  };
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       const response = await productAPI.getAll();
@@ -37,7 +41,11 @@ const AdminProducts = () => {
       showToast('Lỗi khi tải dữ liệu', 'error');
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const filteredProducts = useMemo(() => {
     let filtered = products;
@@ -75,6 +83,100 @@ const AdminProducts = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleDescriptionChange = (content) => {
+    setFormData({ ...formData, description: content });
+  };
+
+  // Convert image file to base64
+  const imageToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Image handler for ReactQuill editor
+  const imageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('Vui lòng chọn file ảnh!', 'error');
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('Ảnh trong mô tả không được vượt quá 2MB!', 'error');
+        return;
+      }
+
+      try {
+        showToast('Đang upload ảnh...', 'info');
+        const base64 = await imageToBase64(file);
+        
+        const quill = quillRef.current.getEditor();
+        const range = quill.getSelection();
+        
+        quill.insertEmbed(range.index, 'image', base64);
+        quill.setSelection(range.index + 1);
+        
+        showToast('Upload ảnh vào mô tả thành công!', 'success');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        showToast('Lỗi khi upload ảnh!', 'error');
+      }
+    };
+  }, []);
+
+  // ReactQuill modules configuration
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ indent: '-1' }, { indent: '+1' }],
+          [{ align: [] }],
+          ['link', 'image'],
+          ['clean'],
+        ],
+        handlers: {
+          image: imageHandler,
+        },
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    }),
+    [imageHandler]
+  );
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'color',
+    'background',
+    'list',
+    'bullet',
+    'indent',
+    'align',
+    'link',
+    'image',
+  ];
 
   // Handle image upload and convert to base64
   const handleImageUpload = async (e) => {
@@ -159,11 +261,6 @@ const AdminProducts = () => {
     });
     setEditingProduct(null);
     setShowForm(false);
-  };
-
-  const showToast = (message, type) => {
-    setToast({ isVisible: true, message, type });
-    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
   };
 
   const columns = [
@@ -317,13 +414,21 @@ const AdminProducts = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Mô tả
                 </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows="5"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-y transition-all"
-                />
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    ref={quillRef}
+                    theme="snow"
+                    value={formData.description}
+                    onChange={handleDescriptionChange}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Viết mô tả sản phẩm tại đây... Bạn có thể thêm ảnh bằng cách nhấn vào icon hình ảnh trên thanh công cụ."
+                    style={{ minHeight: '200px' }}
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  💡 Tip: Ảnh trong mô tả sẽ tự động được lưu dưới dạng base64. Tối đa 2MB/ảnh.
+                </p>
               </div>
               <div className="flex gap-4 pt-4 border-t">
                 <button

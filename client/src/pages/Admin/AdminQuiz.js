@@ -1,8 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { quizAPI, characterAPI } from '../../services/api';
 import AdminTable from '../../components/Admin/AdminTable';
 import AdminSearchFilter from '../../components/Admin/AdminSearchFilter';
 import Toast from '../../components/Toast';
+
+// Helper function to strip HTML tags for preview
+const stripHtml = (html) => {
+  if (!html) return '';
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
 
 const AdminQuiz = () => {
   const [questions, setQuestions] = useState([]);
@@ -23,13 +33,15 @@ const AdminQuiz = () => {
     correct_answer: 'A',
     character_id: '',
   });
+  const quillRef = useRef(null);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const showToast = (message, type) => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
+  };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const [questionsRes, charactersRes] = await Promise.all([
@@ -44,7 +56,11 @@ const AdminQuiz = () => {
       showToast('Lỗi khi tải dữ liệu', 'error');
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const filteredQuestions = useMemo(() => {
     let filtered = questions;
@@ -84,6 +100,37 @@ const AdminQuiz = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleQuestionChange = (content) => {
+    setFormData({ ...formData, question: content });
+  };
+
+  // ReactQuill modules configuration for question
+  const questionModules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['clean'],
+        ],
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    }),
+    []
+  );
+
+  const questionFormats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'list',
+    'bullet',
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -150,11 +197,6 @@ const AdminQuiz = () => {
     setShowForm(false);
   };
 
-  const showToast = (message, type) => {
-    setToast({ isVisible: true, message, type });
-    setTimeout(() => setToast({ ...toast, isVisible: false }), 3000);
-  };
-
   const getCharacterName = (characterId) => {
     if (!characterId) return 'Chung';
     const character = characters.find((c) => c.id === characterId);
@@ -166,7 +208,11 @@ const AdminQuiz = () => {
     {
       key: 'question',
       label: 'Câu hỏi',
-      render: (value) => (value ? (value.length > 50 ? value.substring(0, 50) + '...' : value) : '-'),
+      render: (value) => {
+        if (!value) return '-';
+        const plainText = stripHtml(value);
+        return plainText.length > 50 ? plainText.substring(0, 50) + '...' : plainText;
+      },
     },
     {
       key: 'correct_answer',
@@ -226,14 +272,18 @@ const AdminQuiz = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Câu hỏi *
                 </label>
-                <textarea
-                  name="question"
-                  value={formData.question}
-                  onChange={handleInputChange}
-                  required
-                  rows="3"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-history-red focus:border-transparent outline-none resize-y"
-                />
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    ref={quillRef}
+                    theme="snow"
+                    value={formData.question}
+                    onChange={handleQuestionChange}
+                    modules={questionModules}
+                    formats={questionFormats}
+                    placeholder="Viết câu hỏi tại đây..."
+                    style={{ minHeight: '120px' }}
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { quizAPI } from '../services/api';
 
 const QuizDetail = () => {
@@ -186,9 +186,9 @@ const QuizDetail = () => {
 
         {/* Results Card */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center">
+          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center" data-aos="fade-up">
             {/* Score Circle */}
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center mb-8" data-aos="zoom-in" data-aos-delay="200">
               <div className="relative w-48 h-48 md:w-64 md:h-64">
                 <svg className="transform -rotate-90 w-full h-full" viewBox="0 0 200 200">
                   <circle
@@ -225,7 +225,7 @@ const QuizDetail = () => {
             </div>
 
             {/* Score Details */}
-            <div className="mb-8">
+            <div className="mb-8" data-aos="fade-up" data-aos-delay="300">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 Bạn đã trả lời đúng {correctCount} / {questions.length} câu
               </h2>
@@ -254,7 +254,7 @@ const QuizDetail = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8" data-aos="fade-up" data-aos-delay="400">
               <Link
                 to="/quiz"
                 className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
@@ -320,7 +320,7 @@ const QuizDetail = () => {
         </div>
 
         {/* Start Button */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center" data-aos="fade-up" data-aos-delay="300">
           <button
             onClick={handleStartQuiz}
             className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 mx-auto transition-colors shadow-lg"
@@ -397,9 +397,12 @@ const QuizDetail = () => {
           <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4">
             Câu hỏi {currentQuestion + 1}
           </h2>
-          <p className="text-xl sm:text-2xl md:text-3xl text-gray-900 leading-relaxed mb-8">
-            {question.question}
-          </p>
+          <div 
+            className="text-xl sm:text-2xl md:text-3xl text-gray-900 leading-relaxed mb-8 prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ 
+              __html: question.question || '' 
+            }}
+          />
 
           {/* Answer Options */}
           <div className="space-y-4 mb-8">

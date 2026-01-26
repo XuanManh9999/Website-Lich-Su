@@ -3,7 +3,7 @@
 }
 
 .hero {
-  background: #0F4C81;
+  background: #8F1A1E;
   color: white;
   padding: 80px 20px;
   margin-bottom: 60px;
@@ -63,7 +63,7 @@
   align-items: center;
   gap: 8px;
   background: white;
-  color: #0F4C81;
+  color: #8F1A1E;
   padding: 14px 28px;
   border-radius: 8px;
   font-weight: 600;
@@ -102,7 +102,7 @@
 
 .btn-secondary:hover {
   background: white;
-  color: #0F4C81;
+  color: #8F1A1E;
 }
 
 .hero-stats {
@@ -154,7 +154,7 @@
 
 .section-header h2 {
   font-size: 2.5rem;
-  color: #0F4C81;
+  color: #8F1A1E;
   margin-bottom: 12px;
   font-weight: 700;
 }
@@ -217,7 +217,7 @@
 }
 
 .character-info h3 {
-  color: #0F4C81;
+  color: #8F1A1E;
   font-size: 1.4rem;
   font-weight: 600;
   margin: 0;
@@ -238,7 +238,7 @@
 }
 
 .character-link {
-  color: #0F4C81;
+  color: #8F1A1E;
   font-weight: 600;
   font-size: 0.95rem;
   margin-top: 8px;
