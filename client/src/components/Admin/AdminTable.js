@@ -33,7 +33,7 @@ const AdminTable = ({
     <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-[#F7F3E6]">
             <tr>
               {columns.map((col) => (
                 <th
@@ -50,7 +50,7 @@ const AdminTable = ({
           </thead>
           <tbody className="divide-y divide-gray-200">
             {data.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={row.id} className="hover:bg-[#F7F3E6] transition-colors">
                 {columns.map((col) => (
                   <td key={col.key} className="px-4 py-3 text-sm text-gray-700">
                     {col.render ? col.render(row[col.key], row) : row[col.key] || '-'}

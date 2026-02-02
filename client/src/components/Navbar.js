@@ -34,13 +34,19 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-primary text-white shadow-lg sticky top-0 z-50">
+    <nav
+      className="text-white shadow-lg sticky top-0 z-50"
+      style={{
+        background:
+          'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <img 
-              src="/logo.jpg" 
+              src="/logo.png" 
               alt="Việt Sử Quân Logo" 
               className="h-10 w-10 md:h-12 md:w-12 rounded-md object-cover shadow-lg group-hover:scale-105 transition-transform"
             />
@@ -82,6 +88,14 @@ const Navbar = () => {
               }`}
             >
               Quizlet card
+            </Link>
+            <Link 
+              to="/giai-dap" 
+              className={`text-sm xl:text-base font-medium transition-colors ${
+                location.pathname === '/giai-dap' ? 'text-white' : 'hover:text-white/80'
+              }`}
+            >
+              Giải đáp thắc mắc
             </Link>
             <Link 
               to="/chatbot" 
@@ -182,6 +196,13 @@ const Navbar = () => {
               className="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors"
             >
               Quizlet card
+            </Link>
+            <Link 
+              to="/giai-dap" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              Giải đáp thắc mắc
             </Link>
             <Link 
               to="/chatbot" 

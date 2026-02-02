@@ -200,7 +200,19 @@ const FeaturedFlashcards = () => {
                       {/* Start Button */}
                       <button
                         onClick={() => handleStartLearning(flashcard.slug)}
-                        className="w-full md:w-auto bg-primary text-white px-6 md:px-8 py-3 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                        className="w-full md:w-auto text-white px-6 md:px-8 py-3 rounded-lg font-semibold text-base md:text-lg transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                        style={{
+                          background:
+                            'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background =
+                            'linear-gradient(135deg, #B83236 0%, #DF5D63 100%)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background =
+                            'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)';
+                        }}
                       >
                         <svg
                           className="w-5 h-5 fill-current"
@@ -220,7 +232,19 @@ const FeaturedFlashcards = () => {
             <div className="text-center" data-aos="fade-up" data-aos-delay="300">
               <Link
                 to="/quiz"
-                className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
+                className="inline-block text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg transition-colors shadow-md hover:shadow-lg"
+                style={{
+                  background:
+                    'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background =
+                    'linear-gradient(135deg, #B83236 0%, #DF5D63 100%)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background =
+                    'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)';
+                }}
               >
                 Xem tất cả bộ Quizlet card
               </Link>

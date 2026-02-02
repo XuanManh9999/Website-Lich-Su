@@ -3,7 +3,7 @@
 }
 
 .hero {
-  background: #8F1A1E;
+  background: linear-gradient(to bottom, #8F1A1E 0%, #B83236 45%, #5C0F12 100%);
   color: white;
   padding: 80px 20px;
   margin-bottom: 60px;

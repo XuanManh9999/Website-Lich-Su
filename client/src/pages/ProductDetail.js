@@ -75,7 +75,7 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FEFDF6' }}>
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
@@ -86,7 +86,7 @@ const ProductDetail = () => {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FEFDF6' }}>
         <div className="text-center">
           <p className="text-red-600 text-xl mb-4">{error || 'Không tìm thấy sản phẩm'}</p>
           <Link
@@ -103,7 +103,7 @@ const ProductDetail = () => {
   const imageUrl = getSafeImageUrl(product.image_url);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12">
+    <div className="min-h-screen py-8 md:py-12" style={{ backgroundColor: '#FEFDF6' }}>
       <Toast
         message={toast.message}
         type={toast.type}

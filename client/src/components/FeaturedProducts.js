@@ -85,9 +85,17 @@ const FeaturedProducts = () => {
                     onClick={() => setSelectedCategory(category)}
                     className={`px-5 py-2.5 rounded-full font-medium text-sm md:text-base whitespace-nowrap transition-all ${
                       selectedCategory === category
-                        ? 'bg-primary text-white shadow-md'
-                        : 'bg-primary-50 text-primary hover:bg-primary-100'
+                        ? 'text-white shadow-md'
+                        : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
                     }`}
+                    style={
+                      selectedCategory === category
+                        ? {
+                            background:
+                              'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                          }
+                        : {}
+                    }
                   >
                     {category === 'Flashcard' ? 'Bộ Quizlet card học lịch sử thú vị' : category}
                   </button>
@@ -191,7 +199,19 @@ const FeaturedProducts = () => {
                           e.preventDefault();
                           window.location.href = `/san-pham/${productSlug}`;
                         }}
-                        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold text-base hover:bg-primary-light transition-colors mt-auto"
+                        className="w-full text-white py-3 px-4 rounded-lg font-semibold text-base transition-colors mt-auto"
+                        style={{
+                          background:
+                            'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background =
+                            'linear-gradient(135deg, #B83236 0%, #DF5D63 100%)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background =
+                            'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)';
+                        }}
                       >
                         Mua ngay
                       </button>
@@ -205,7 +225,19 @@ const FeaturedProducts = () => {
             <div className="text-center" data-aos="fade-up" data-aos-delay="300">
               <Link
                 to="/san-pham"
-                className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
+                className="inline-block text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg transition-colors shadow-md hover:shadow-lg"
+                style={{
+                  background:
+                    'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background =
+                    'linear-gradient(135deg, #B83236 0%, #DF5D63 100%)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background =
+                    'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)';
+                }}
               >
                 Xem tất cả sản phẩm
               </Link>

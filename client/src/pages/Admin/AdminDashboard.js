@@ -68,7 +68,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto max-w-7xl">
         <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8">
           Tổng Quan Hệ Thống
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
           <h2 className="text-2xl font-bold text-primary mb-4">Quản Lý Nhanh</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {statCards.map((card) => (
-              <Link
+          <Link 
                 key={card.path}
                 to={card.path}
                 className="p-4 border-2 border-gray-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"

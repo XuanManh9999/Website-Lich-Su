@@ -143,7 +143,7 @@ const QuizDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FEFDF6' }}>
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600 text-lg">Đang tải...</p>
@@ -154,7 +154,7 @@ const QuizDetail = () => {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FEFDF6' }}>
         <div className="text-center">
           <p className="text-red-600 text-xl mb-4">Không tìm thấy câu hỏi nào.</p>
           <Link
@@ -175,7 +175,7 @@ const QuizDetail = () => {
     const percentage = Math.round((correctCount / questions.length) * 100);
 
     return (
-      <div className="min-h-screen bg-gray-50 py-8 md:py-12">
+      <div className="min-h-screen py-8 md:py-12" style={{ backgroundColor: '#FEFDF6' }}>
         {/* Red Header */}
         <div className="bg-primary text-white py-6 md:py-8 mb-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -284,7 +284,7 @@ const QuizDetail = () => {
   // Pre-start screen
   if (!hasStarted) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 md:py-12">
+      <div className="min-h-screen py-8 md:py-12" style={{ backgroundColor: '#FEFDF6' }}>
         {/* Red Header */}
         <div className="bg-primary text-white py-6 md:py-8 mb-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -336,7 +336,7 @@ const QuizDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#FEFDF6' }}>
       {/* Red Header */}
       <div className="bg-primary text-white py-4 md:py-6">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

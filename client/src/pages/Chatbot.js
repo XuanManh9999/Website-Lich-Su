@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
 import { chatbotAPI } from '../services/api';
 
+// Helper function to strip HTML tags and clean text
+function stripHtml(html) {
+  if (!html) return '';
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+// Helper function to format text (preserve line breaks)
+function formatText(text) {
+  if (!text) return '';
+  // Strip HTML first
+  let cleanText = stripHtml(text);
+  // Replace \n with <br> for line breaks
+  return cleanText.split('\n').map((line, index, array) => 
+    index < array.length - 1 ? [line, <br key={index} />] : line
+  );
+}
+
 const Chatbot = () => {
   const [selectedMode, setSelectedMode] = useState(null);
   const [question, setQuestion] = useState('');
@@ -164,7 +183,7 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto max-w-6xl">
         {/* Main Interactive Section */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 md:p-8 lg:p-10 mb-8" data-aos="fade-up">
@@ -242,7 +261,9 @@ const Chatbot = () => {
                         : 'bg-gray-100 text-gray-900'
                     }`}
                   >
-                    <p className="text-sm md:text-base">{message.text}</p>
+                    <div className="text-sm md:text-base whitespace-pre-wrap">
+                      {message.type === 'ai' ? formatText(message.text) : message.text}
+                    </div>
                   </div>
                 </div>
               ))}

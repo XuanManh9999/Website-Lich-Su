@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-primary text-white mt-auto">
+    <footer
+      className="text-white mt-auto"
+      style={{
+        background:
+          'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+      }}
+    >
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
@@ -155,8 +161,8 @@ const Footer = () => {
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                   />
                 </svg>
-                <a href="tel:0385638875" className="hover:text-white transition-colors">
-                  0385638875
+                <a href="tel:0335969377" className="hover:text-white transition-colors">
+                  0335969377
                 </a>
               </li>
               <li className="flex items-center gap-3 text-white/90">
@@ -186,7 +192,7 @@ const Footer = () => {
       <div className="border-t border-white/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
           <p className="text-center text-sm md:text-base text-white/80">
-            © 2026 Việt Sử Quân. Tất cả quyền được bảo lưu.
+            © 2026 Thiên Sử Ký. Tất cả quyền được bảo lưu.
           </p>
         </div>
       </div>

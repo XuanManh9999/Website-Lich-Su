@@ -7,6 +7,24 @@ require('dotenv').config();
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY');
 
+// Helper function to strip HTML tags and decode HTML entities
+function stripHtml(html) {
+  if (!html) return '';
+  // Remove HTML tags
+  let text = html.replace(/<[^>]*>/g, '');
+  // Decode common HTML entities
+  text = text.replace(/&nbsp;/g, ' ');
+  text = text.replace(/&amp;/g, '&');
+  text = text.replace(/&lt;/g, '<');
+  text = text.replace(/&gt;/g, '>');
+  text = text.replace(/&quot;/g, '"');
+  text = text.replace(/&#39;/g, "'");
+  text = text.replace(/&apos;/g, "'");
+  // Remove extra whitespace
+  text = text.replace(/\s+/g, ' ').trim();
+  return text;
+}
+
 // Helper function to query database for historical information
 async function queryDatabase(userQuery) {
   try {
@@ -24,8 +42,8 @@ async function queryDatabase(userQuery) {
         type: 'character',
         name: c.name,
         timeline: c.timeline,
-        summary: c.summary,
-        content: c.content?.substring(0, 500),
+        summary: stripHtml(c.summary || ''),
+        content: stripHtml(c.content || '').substring(0, 500),
       })));
     }
 
@@ -38,7 +56,7 @@ async function queryDatabase(userQuery) {
       results.push(...posts.map(p => ({
         type: 'post',
         title: p.title,
-        content: p.content?.substring(0, 500),
+        content: stripHtml(p.content || '').substring(0, 500),
       })));
     }
 
@@ -96,8 +114,8 @@ router.post('/chat', async (req, res) => {
     context += `Câu hỏi của người dùng: ${message}\n`;
     context += 'Hãy trả lời câu hỏi dựa trên thông tin từ cơ sở dữ liệu và kiến thức của bạn. Nếu thông tin từ cơ sở dữ liệu có liên quan, hãy tham khảo và sử dụng nó.';
 
-    // Get Gemini model
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    // Get Gemini model - use gemini-1.5-flash
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }); 
 
     // Generate response
     const result = await model.generateContent(context);
@@ -111,22 +129,52 @@ router.post('/chat', async (req, res) => {
   } catch (error) {
     console.error('Chatbot error:', error);
     
-    // Fallback response if Gemini fails
+    // Fallback response if Gemini fails - create a better formatted response
     const { message } = req.body;
     const dbResults = await queryDatabase(message || '');
-    let fallbackResponse = 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. ';
-
+    
+    let fallbackResponse = '';
+    
     if (dbResults.length > 0) {
-      fallbackResponse += 'Dựa trên thông tin trong cơ sở dữ liệu:\n\n';
-      dbResults.slice(0, 2).forEach((result) => {
+      // Create a well-formatted response from database
+      fallbackResponse = 'Dựa trên thông tin trong cơ sở dữ liệu của chúng tôi:\n\n';
+      
+      dbResults.slice(0, 3).forEach((result, index) => {
         if (result.type === 'character') {
-          fallbackResponse += `${result.name} (${result.timeline}): ${result.summary}\n\n`;
+          const cleanSummary = stripHtml(result.summary || '');
+          const cleanContent = stripHtml(result.content || '');
+          const fullText = cleanSummary || cleanContent;
+          
+          fallbackResponse += `**${result.name}**`;
+          if (result.timeline) {
+            fallbackResponse += ` (${result.timeline})`;
+          }
+          fallbackResponse += '\n\n';
+          
+          if (fullText) {
+            fallbackResponse += fullText.substring(0, 400);
+            if (fullText.length > 400) {
+              fallbackResponse += '...';
+            }
+            fallbackResponse += '\n\n';
+          }
         } else if (result.type === 'post') {
-          fallbackResponse += `${result.title}: ${result.content?.substring(0, 200)}...\n\n`;
+          const cleanContent = stripHtml(result.content || '');
+          fallbackResponse += `**${result.title}**\n\n`;
+          if (cleanContent) {
+            fallbackResponse += cleanContent.substring(0, 300);
+            if (cleanContent.length > 300) {
+              fallbackResponse += '...';
+            }
+            fallbackResponse += '\n\n';
+          }
         }
       });
+      
+      fallbackResponse += '\nĐể biết thêm chi tiết, vui lòng xem các trang nhân vật và blog lịch sử trên website.';
     } else {
-      fallbackResponse += 'Vui lòng thử lại sau hoặc xem thông tin chi tiết tại các trang nhân vật và blog lịch sử.';
+      fallbackResponse = 'Xin lỗi, tôi không tìm thấy thông tin liên quan đến câu hỏi của bạn trong cơ sở dữ liệu. ';
+      fallbackResponse += 'Vui lòng thử lại với câu hỏi khác hoặc xem thông tin chi tiết tại các trang nhân vật và blog lịch sử.';
     }
 
     res.json({ response: fallbackResponse, sources: dbResults.length > 0 ? dbResults : null });

@@ -8,7 +8,8 @@
   }
   
   body {
-    @apply font-sans antialiased bg-gray-50 text-gray-900;
+    @apply font-sans antialiased text-gray-900;
+    background-color: #FEFDF6;
   }
   
   a {
@@ -18,11 +19,22 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center gap-2 bg-white text-primary px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg;
+    @apply inline-flex items-center gap-2 bg-white px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg;
+    color: #8F1A1E;
+  }
+  
+  .btn-primary:hover {
+    color: #B83236;
   }
   
   .btn-secondary {
-    @apply inline-flex items-center bg-transparent text-white px-7 py-3.5 border-2 border-white rounded-lg font-semibold text-base transition-all duration-200 hover:bg-white hover:text-primary;
+    @apply inline-flex items-center bg-transparent text-white px-7 py-3.5 border-2 border-white rounded-lg font-semibold text-base transition-all duration-200;
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background: white;
+    color: #8F1A1E;
   }
   
   .card {

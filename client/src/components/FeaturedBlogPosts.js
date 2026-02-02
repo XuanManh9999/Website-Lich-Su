@@ -51,7 +51,7 @@ const FeaturedBlogPosts = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
+    <section className="py-12 md:py-16 lg:py-20" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12" data-aos="fade-up">
@@ -68,9 +68,17 @@ const FeaturedBlogPosts = () => {
               onClick={() => setSelectedCategory('Tất cả')}
               className={`px-6 py-2.5 rounded-lg font-semibold text-sm md:text-base transition-all ${
                 selectedCategory === 'Tất cả'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-primary-50 text-primary hover:bg-primary-100'
+                  ? 'text-white shadow-md'
+                  : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
               }`}
+              style={
+                selectedCategory === 'Tất cả'
+                  ? {
+                      background:
+                        'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                    }
+                  : {}
+              }
             >
               Tất cả
             </button>
@@ -78,9 +86,17 @@ const FeaturedBlogPosts = () => {
               onClick={() => setSelectedCategory('Blog')}
               className={`px-6 py-2.5 rounded-lg font-semibold text-sm md:text-base transition-all ${
                 selectedCategory === 'Blog'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-primary-50 text-primary hover:bg-primary-100'
+                  ? 'text-white shadow-md'
+                  : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
               }`}
+              style={
+                selectedCategory === 'Blog'
+                  ? {
+                      background:
+                        'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                    }
+                  : {}
+              }
             >
               Blog
             </button>
@@ -196,7 +212,19 @@ const FeaturedBlogPosts = () => {
             <div className="text-center" data-aos="fade-up" data-aos-delay="300">
               <Link
                 to="/blog"
-                className="inline-block bg-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
+                className="inline-block text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg transition-colors shadow-md hover:shadow-lg"
+                style={{
+                  background:
+                    'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background =
+                    'linear-gradient(135deg, #B83236 0%, #DF5D63 100%)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background =
+                    'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)';
+                }}
               >
                 Xem tất cả bài viết
               </Link>

@@ -17,6 +17,7 @@ import ProductDetail from "./pages/ProductDetail";
 import FlashCards from "./pages/FlashCards";
 import QuizDetail from "./pages/QuizDetail";
 import Chatbot from "./pages/Chatbot";
+import FAQ from "./pages/FAQ";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -62,6 +63,7 @@ function App() {
             <Route path="/quiz" element={<FlashCards />} />
             <Route path="/quiz/:id" element={<QuizDetail />} />
             <Route path="/chatbot" element={<Chatbot />} />
+            <Route path="/giai-dap" element={<FAQ />} />
             <Route path="/gio-hang" element={<Cart />} />
             <Route path="/thanh-toan" element={<Checkout />} />
             <Route path="/dat-hang-thanh-cong" element={<OrderSuccess />} />

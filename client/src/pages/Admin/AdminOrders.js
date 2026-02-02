@@ -165,7 +165,7 @@ const AdminOrders = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary">Quản Trị Đơn Hàng</h1>
@@ -215,7 +215,7 @@ const AdminOrders = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
                     <h3 className="font-semibold text-gray-700 mb-2">Thông tin khách hàng</h3>
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                    <div className="bg-[#F7F3E6] p-4 rounded-lg space-y-2">
                       <p><span className="font-medium">Tên:</span> {selectedOrder.customer_name || 'N/A'}</p>
                       <p><span className="font-medium">Email:</span> {selectedOrder.customer_email || 'N/A'}</p>
                       <p><span className="font-medium">SĐT:</span> {selectedOrder.customer_phone || 'N/A'}</p>
@@ -224,7 +224,7 @@ const AdminOrders = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-700 mb-2">Thông tin đơn hàng</h3>
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                    <div className="bg-[#F7F3E6] p-4 rounded-lg space-y-2">
                       <p>
                         <span className="font-medium">Trạng thái:</span>{' '}
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedOrder.status)}`}>
@@ -251,7 +251,7 @@ const AdminOrders = () => {
                     <h3 className="font-semibold text-gray-700 mb-3">Sản phẩm</h3>
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-[#F7F3E6]">
                           <tr>
                             <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Sản phẩm</th>
                             <th className="px-4 py-3 text-left text-sm font-semibold text-primary">SL</th>

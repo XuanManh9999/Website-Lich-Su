@@ -83,7 +83,7 @@
   quotes: "\201C""\201D""\2018""\2019";
   margin: 1.6em 0;
   padding-left: 1em;
-  background: #FEE2E2;
+  background: #FFF4F0;
   padding: 1em 1.5em;
   border-radius: 0.5rem;
 }
@@ -275,7 +275,7 @@
 
 .prose-primary blockquote {
   border-left-color: #8F1A1E;
-  background: #FEE2E2;
+  background: #FFF4F0;
 }
 
 /* Mobile responsive */

@@ -15,12 +15,14 @@ const AdminCarousel = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingSlide, setEditingSlide] = useState(null);
   const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     quote: '',
     author: 'Thiên Sử Ký',
     display_order: 0,
     is_active: true,
-    image_url: '',
+    image_url: '',   // dùng cho preview
+    imageFile: null, // File thực tế để upload
   });
   const quillRef = useRef(null);
   const itemsPerPage = 10;
@@ -130,8 +132,8 @@ const AdminCarousel = () => {
 
     try {
       showToast('Đang upload ảnh...', 'info');
-      const base64 = await fileToBase64(file);
-      setFormData({ ...formData, image_url: base64 });
+      const base64 = await fileToBase64(file); // chỉ dùng để preview
+      setFormData({ ...formData, image_url: base64, imageFile: file });
       showToast('Upload ảnh thành công!', 'success');
     } catch (error) {
       console.error('Error converting image:', error);
@@ -142,18 +144,23 @@ const AdminCarousel = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return; // Prevent multiple submissions
+    
+    setIsSubmitting(true);
     try {
       if (editingSlide) {
         await carouselAPI.update(editingSlide.id, formData);
-        showToast('Cập nhật slide thành công!', 'success');
+        showToast('✅ Cập nhật slide thành công!', 'success');
       } else {
         await carouselAPI.create(formData);
-        showToast('Tạo slide mới thành công!', 'success');
+        showToast('✅ Tạo slide mới thành công!', 'success');
       }
       fetchSlides();
       resetForm();
     } catch (error) {
-      showToast(error.response?.data?.error || 'Có lỗi xảy ra', 'error');
+      showToast(error.response?.data?.error || '❌ Có lỗi xảy ra', 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -164,7 +171,8 @@ const AdminCarousel = () => {
       author: slide.author || 'Thiên Sử Ký',
       display_order: slide.display_order || 0,
       is_active: slide.is_active !== undefined ? slide.is_active : true,
-      image_url: slide.image_url || '',
+      image_url: slide.image_url || '', // ở đây là URL text từ DB (hoặc rỗng)
+      imageFile: null,
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -192,6 +200,7 @@ const AdminCarousel = () => {
       display_order: 0,
       is_active: true,
       image_url: '',
+      imageFile: null,
     });
     setEditingSlide(null);
     setShowForm(false);
@@ -245,7 +254,7 @@ const AdminCarousel = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary">Quản Trị Carousel</h1>
@@ -378,9 +387,24 @@ const AdminCarousel = () => {
               <div className="flex gap-4 pt-4 border-t">
                 <button
                   type="submit"
-                  className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors shadow-md hover:shadow-lg"
+                  disabled={isSubmitting}
+                  className={`bg-primary text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg flex items-center gap-2 ${
+                    isSubmitting 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : 'hover:bg-primary-light'
+                  }`}
                 >
-                  {editingSlide ? '✅ Cập Nhật' : '➕ Tạo Mới'}
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Đang xử lý...</span>
+                    </>
+                  ) : (
+                    <>{editingSlide ? '✅ Cập Nhật' : '➕ Tạo Mới'}</>
+                  )}
                 </button>
                 <button
                   type="button"

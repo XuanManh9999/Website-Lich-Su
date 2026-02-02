@@ -30,7 +30,7 @@ const Characters = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 py-8 md:py-12">
+    <div className="w-full min-h-screen py-8 md:py-12" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12" data-aos="fade-up">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">

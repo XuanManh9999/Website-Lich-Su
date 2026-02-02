@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
+const db = require('./config/database');
 require('dotenv').config();
 
 const characterRoutes = require('./routes/characters');
@@ -35,6 +36,17 @@ app.use(express.urlencoded({ extended: true, limit: '50mb', parameterLimit: 5000
 
 // Serve uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Ensure database schema supports large base64 images for carousel
+(async () => {
+  try {
+    await db.query('ALTER TABLE carousel_slides MODIFY COLUMN image_url LONGTEXT');
+    console.log('✅ Ensured carousel_slides.image_url is LONGTEXT');
+  } catch (err) {
+    // Nếu cột đã là LONGTEXT hoặc bảng chưa tồn tại, chỉ log cảnh báo rồi bỏ qua
+    console.warn('ℹ️ Could not alter carousel_slides.image_url to LONGTEXT (may already be LONGTEXT):', err.code);
+  }
+})();
 
 // Routes
 app.use('/api/characters', characterRoutes);

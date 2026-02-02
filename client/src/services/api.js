@@ -151,24 +151,35 @@ export const carouselAPI = {
   getAll: () => api.get("/carousel"),
   getAllForAdmin: () => api.get("/carousel/all"),
   getById: (id) => api.get(`/carousel/${id}`),
+  // Dùng FormData + upload file, lưu đường dẫn text vào DB
   create: (data) => {
     const formData = new FormData();
-    formData.append("quote", data.quote);
+    formData.append("quote", data.quote || "");
     formData.append("author", data.author || "Thiên Sử Ký");
     formData.append("display_order", data.display_order || 0);
     formData.append("is_active", data.is_active !== undefined ? data.is_active : true);
-    if (data.image) formData.append("image", data.image);
+    // imageFile là file upload, image_url (preview) bỏ qua, DB chỉ lưu path text
+    if (data.imageFile) {
+      formData.append("image", data.imageFile);
+    } else if (data.image_url) {
+      // Trường hợp dùng URL text thủ công (nếu có)
+      formData.append("image_url", data.image_url);
+    }
     return api.post("/carousel", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
   update: (id, data) => {
     const formData = new FormData();
-    formData.append("quote", data.quote);
+    formData.append("quote", data.quote || "");
     formData.append("author", data.author || "Thiên Sử Ký");
     formData.append("display_order", data.display_order || 0);
     formData.append("is_active", data.is_active !== undefined ? data.is_active : true);
-    if (data.image) formData.append("image", data.image);
+    if (data.imageFile) {
+      formData.append("image", data.imageFile);
+    } else if (data.image_url) {
+      formData.append("image_url", data.image_url);
+    }
     return api.put(`/carousel/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });

@@ -69,7 +69,7 @@ const Quiz = () => {
 
   if (showResult) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
@@ -93,7 +93,7 @@ const Quiz = () => {
   const question = questions[currentQuestion];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center mb-8">
           Quiz Trắc Nghiệm

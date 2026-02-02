@@ -66,7 +66,7 @@ const FlashCards = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12" data-aos="fade-up">

@@ -14,7 +14,7 @@ const OrderSuccess = () => {
   }, [orderId, navigate]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center" data-aos="fade-up">
           {/* Success Icon */}
@@ -46,7 +46,7 @@ const OrderSuccess = () => {
 
           {/* Order ID */}
           {orderId && (
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <div className="bg-[#F7F3E6] rounded-lg p-4 mb-6">
               <p className="text-sm text-gray-600 mb-1">Mã đơn hàng của bạn:</p>
               <p className="text-xl font-bold text-primary">{orderId}</p>
             </div>

@@ -51,7 +51,7 @@ const CharacterDetail = () => {
     : null;
 
   return (
-    <div className="w-full min-h-screen bg-gray-50">
+    <div className="w-full min-h-screen" style={{ backgroundColor: '#FEFDF6' }}>
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
           {/* Image */}

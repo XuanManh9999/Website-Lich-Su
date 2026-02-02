@@ -158,7 +158,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12">
+    <div className="min-h-screen py-8 md:py-12" style={{ backgroundColor: '#FEFDF6' }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -329,7 +329,7 @@ const Dashboard = () => {
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-[#F7F3E6]">
                 <tr>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-primary">ID</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-primary">Tên</th>
@@ -339,7 +339,7 @@ const Dashboard = () => {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {characters.map((character) => (
-                  <tr key={character.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={character.id} className="hover:bg-[#F7F3E6] transition-colors">
                     <td className="px-4 py-3 text-sm text-gray-700">{character.id}</td>
                     <td className="px-4 py-3 text-sm font-medium text-gray-900">{character.name}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">{character.slug}</td>
