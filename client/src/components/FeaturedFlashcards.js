@@ -1,24 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { quizAPI } from '../services/api';
+import { quizAPI, quizCategoryAPI } from '../services/api';
 
 const FeaturedFlashcards = () => {
   const [flashcards, setFlashcards] = useState([]);
+  const [categoryQuestionCounts, setCategoryQuestionCounts] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        const response = await quizAPI.getAll();
-        const questions = response.data || [];
-        
-        if (questions.length > 0) {
-          // Create flashcard sets from quiz questions
-          const sets = createFlashcardSets(questions);
-          setFlashcards(sets.slice(0, 3)); // Show first 3 sets
-        } else {
-          setFlashcards([]);
-        }
+        const categoriesRes = await quizCategoryAPI.getAll();
+        const categories = categoriesRes.data || [];
+
+        // Lấy số câu hỏi theo từng category
+        const counts = {};
+        await Promise.all(
+          categories.map(async (cat) => {
+            try {
+              const qRes = await quizAPI.getAll({ category_id: cat.id });
+              counts[cat.id] = (qRes.data || []).length;
+            } catch (e) {
+              counts[cat.id] = 0;
+            }
+          })
+        );
+
+        setCategoryQuestionCounts(counts);
+
+        // Chỉ lấy các category có câu hỏi để hiển thị nổi bật
+        const available = categories.filter((c) => (counts[c.id] || 0) > 0);
+        setFlashcards(available.slice(0, 3));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching flashcards:', error);
@@ -28,54 +40,8 @@ const FeaturedFlashcards = () => {
     };
     fetchFlashcards();
   }, []);
-
-  // Create flashcard sets from questions
-  const createFlashcardSets = (questions) => {
-    if (!questions || questions.length === 0) {
-      return [];
-    }
-
-    // Group questions by character_id or create a general set
-    const grouped = {};
-    questions.forEach(q => {
-      const key = q.character_id || 'general';
-      if (!grouped[key]) {
-        grouped[key] = [];
-      }
-      grouped[key].push(q);
-    });
-
-    // Convert to flashcard sets
-    const sets = Object.keys(grouped).map((key, index) => {
-      const questionsInSet = grouped[key];
-      const questionCount = questionsInSet.length;
-      return {
-        id: key === 'general' ? `general-${index}` : `character-${key}`,
-        title: key === 'general' 
-          ? `Quiz Tổng Hợp ${index + 1}` 
-          : `Quiz Nhân Vật Lịch Sử`,
-        description: key === 'general'
-          ? `Câu hỏi tổng hợp về lịch sử Việt Nam`
-          : `Câu hỏi về nhân vật lịch sử`,
-        preview: key === 'general'
-          ? `Câu hỏi tổng hợp về lịch sử Việt Nam`
-          : `Câu hỏi về nhân vật lịch sử`,
-        cardsCount: questionCount,
-        studyTime: Math.ceil(questionCount * 2), // 2 minutes per card
-        difficulty: questionCount <= 5 ? 'Dễ' : questionCount <= 10 ? 'Trung bình' : 'Khó',
-        isFavorite: index < 2, // First 2 sets are favorite
-        slug: key === 'general' ? `general-${index}` : `character-${key}`,
-        questionIds: questionsInSet.map(q => q.id),
-      };
-    });
-
-    return sets;
-  };
-
-  const handleStartLearning = (slug) => {
-    // Navigate to quiz page or specific flashcard set
-    window.location.href = `/quiz?set=${slug}`;
-  };
+  const getDifficulty = (count) =>
+    count <= 5 ? 'Dễ' : count <= 10 ? 'Trung bình' : 'Khó';
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-pink-50">
@@ -98,7 +64,7 @@ const FeaturedFlashcards = () => {
           </div>
         ) : flashcards.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">Chưa có bộ flashcard nào.</p>
+            <p className="text-gray-600 text-lg">Chưa có danh mục quiz nào.</p>
           </div>
         ) : (
           <>
@@ -116,9 +82,9 @@ const FeaturedFlashcards = () => {
                       {/* Title with Star */}
                       <div className="flex items-center gap-2 mb-3">
                         <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
-                          {flashcard.title}
+                          {flashcard.name}
                         </h3>
-                        {flashcard.isFavorite && (
+                        {index < 2 && (
                           <svg
                             className="w-6 h-6 md:w-7 md:h-7 text-yellow-400 fill-current"
                             viewBox="0 0 24 24"
@@ -130,12 +96,15 @@ const FeaturedFlashcards = () => {
 
                       {/* Description */}
                       <p className="text-base sm:text-lg text-gray-700 mb-3 leading-relaxed">
-                        {flashcard.description}
+                        {flashcard.description ||
+                          `Câu hỏi trắc nghiệm về ${flashcard.name}`}
                       </p>
 
                       {/* Preview */}
                       <p className="text-sm sm:text-base text-gray-600 italic mb-4 leading-relaxed">
-                        Nội dung preview: {flashcard.preview}
+                        Nội dung preview:{' '}
+                        {flashcard.description ||
+                          `Câu hỏi trắc nghiệm về ${flashcard.name}`}
                       </p>
                     </div>
 
@@ -160,7 +129,7 @@ const FeaturedFlashcards = () => {
                           </svg>
                           <div className="text-center md:text-left">
                             <div className="text-xl md:text-2xl font-bold text-primary">
-                              {flashcard.cardsCount}
+                              {categoryQuestionCounts[flashcard.id] || 0}
                             </div>
                             <div className="text-xs md:text-sm text-gray-600">Thẻ học</div>
                           </div>
@@ -183,7 +152,9 @@ const FeaturedFlashcards = () => {
                           </svg>
                           <div className="text-center md:text-left">
                             <div className="text-xl md:text-2xl font-bold text-primary">
-                              {flashcard.studyTime}
+                              {Math.ceil(
+                                ((categoryQuestionCounts[flashcard.id] || 0) * 2)
+                              )}
                             </div>
                             <div className="text-xs md:text-sm text-gray-600">Thời gian học</div>
                           </div>
@@ -193,25 +164,17 @@ const FeaturedFlashcards = () => {
                       {/* Difficulty */}
                       <div className="w-full md:w-auto">
                         <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                          {flashcard.difficulty}
+                          {getDifficulty(categoryQuestionCounts[flashcard.id] || 0)}
                         </span>
                       </div>
 
                       {/* Start Button */}
-                      <button
-                        onClick={() => handleStartLearning(flashcard.slug)}
+                      <Link
+                        to={`/quiz/${flashcard.id}`}
                         className="w-full md:w-auto text-white px-6 md:px-8 py-3 rounded-lg font-semibold text-base md:text-lg transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                         style={{
                           background:
                             'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.background =
-                            'linear-gradient(135deg, #B83236 0%, #DF5D63 100%)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.background =
-                            'linear-gradient(135deg, #8F1A1E 0%, #B83236 45%, #5C0F12 100%)';
                         }}
                       >
                         <svg
@@ -221,7 +184,7 @@ const FeaturedFlashcards = () => {
                           <path d="M8 5v14l11-7z" />
                         </svg>
                         Bắt đầu học
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

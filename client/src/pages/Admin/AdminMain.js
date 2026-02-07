@@ -31,6 +31,7 @@ const AdminMain = () => {
     { path: '/admin/posts', label: 'Bài Viết', icon: '📝' },
     { path: '/admin/products', label: 'Sản Phẩm', icon: '🛍️' },
     { path: '/admin/quiz', label: 'Câu Hỏi Quiz', icon: '❓' },
+    { path: '/admin/quiz-categories', label: 'Danh Mục Quiz', icon: '📚' },
     { path: '/admin/orders', label: 'Đơn Hàng', icon: '💰' },
     { path: '/admin/admins', label: 'Quản Trị Viên', icon: '👥' },
   ];

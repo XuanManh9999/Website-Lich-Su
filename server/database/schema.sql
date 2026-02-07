@@ -1,9 +1,9 @@
--- Database: website_lich_su
+-- Database: vietsuquan
 -- Gộp tất cả các bảng vào một file duy nhất
 
-CREATE DATABASE IF NOT EXISTS website_lich_su CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS vietsuquan CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE website_lich_su;
+USE vietsuquan;
 
 -- ============================================
 -- Bảng nhân vật lịch sử
@@ -81,6 +81,18 @@ CREATE TABLE IF NOT EXISTS products (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
+-- Bảng danh mục quiz (chủ đề quiz)
+-- ============================================
+CREATE TABLE IF NOT EXISTS quiz_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name NVARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
 -- Bảng câu hỏi quiz
 -- ============================================
 CREATE TABLE IF NOT EXISTS quiz_questions (
@@ -92,8 +104,12 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
     option_d NVARCHAR(255),
     correct_answer CHAR(1) NOT NULL,
     character_id INT,
+    category_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE SET NULL
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES quiz_categories(id) ON DELETE SET NULL,
+    INDEX idx_category_id (category_id),
+    INDEX idx_character_id (character_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================

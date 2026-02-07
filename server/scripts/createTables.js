@@ -18,8 +18,8 @@ async function createTables() {
     console.log('Đang kết nối database...');
 
     // Tạo database nếu chưa có
-    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'website_lich_su'} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
-    await connection.query(`USE ${process.env.DB_NAME || 'website_lich_su'}`);
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'vietsuquan'} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+    await connection.query(`USE ${process.env.DB_NAME || 'vietsuquan'}`);
 
     console.log('Database đã sẵn sàng');
 

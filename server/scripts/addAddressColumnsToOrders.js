@@ -7,7 +7,7 @@ async function addAddressColumns() {
       host: process.env.DB_HOST || '103.200.23.43',
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || 'toilamanhdevhust',
-      database: process.env.DB_NAME || 'website_lich_su',
+      database: process.env.DB_NAME || 'vietsuquan',
     });
 
     console.log('✅ Đang kết nối database...\n');
@@ -19,7 +19,7 @@ async function addAddressColumns() {
        WHERE TABLE_SCHEMA = ? 
        AND TABLE_NAME = 'orders' 
        AND COLUMN_NAME IN ('province', 'district', 'ward', 'address_detail')`,
-      [process.env.DB_NAME || 'website_lich_su']
+      [process.env.DB_NAME || 'vietsuquan']
     );
 
     const existingColumns = columns.map(col => col.COLUMN_NAME);

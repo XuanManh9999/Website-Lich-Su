@@ -31,6 +31,7 @@ import AdminCharacters from "./pages/Admin/AdminCharacters";
 import AdminPosts from "./pages/Admin/AdminPosts";
 import AdminProducts from "./pages/Admin/AdminProducts";
 import AdminQuiz from "./pages/Admin/AdminQuiz";
+import AdminQuizCategories from "./pages/Admin/AdminQuizCategories";
 import AdminOrders from "./pages/Admin/AdminOrders";
 import AdminAdmins from "./pages/Admin/AdminAdmins";
 import ForgotPassword from "./pages/Admin/ForgotPassword";
@@ -79,6 +80,7 @@ function App() {
               <Route path="posts" element={<AdminPosts />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="quiz" element={<AdminQuiz />} />
+              <Route path="quiz-categories" element={<AdminQuizCategories />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="admins" element={<AdminAdmins />} />
             </Route>

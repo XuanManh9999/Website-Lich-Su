@@ -162,23 +162,22 @@ const FeaturedProducts = () => {
 
                       {/* Author/Details */}
                       {product.description && (
-                        <div className="text-sm text-gray-600 space-y-1">
+                        <div className="text-sm text-gray-600">
                           {(() => {
                             // Strip HTML and get plain text
                             const tmp = document.createElement('DIV');
                             tmp.innerHTML = product.description;
                             const plainText = tmp.textContent || tmp.innerText || '';
-                            // Split by bullet points if present, otherwise show first 100 chars
+                            // Split by bullet points if present, otherwise show first 60 chars
                             const items = plainText.split('•').filter(item => item.trim());
-                            const displayItems = items.length > 0 ? items.slice(0, 3) : [plainText.substring(0, 100)];
-                            return displayItems.map((item, idx) => (
-                            item.trim() && (
-                              <p key={idx} className="flex items-start">
-                                  {items.length > 0 && idx > 0 && <span className="mr-2">•</span>}
-                                <span className={idx === 0 ? '' : 'ml-1'}>{item.trim()}</span>
+                            const displayText = items.length > 0 
+                              ? items[0].trim().substring(0, 60) 
+                              : plainText.substring(0, 60);
+                            return (
+                              <p className="line-clamp-2">
+                                {displayText}{displayText.length < (items.length > 0 ? items[0].trim().length : plainText.length) ? '...' : ''}
                               </p>
-                            )
-                            ));
+                            );
                           })()}
                         </div>
                       )}

@@ -47,7 +47,7 @@ async function seedData() {
       host: process.env.DB_HOST || '103.200.23.43',
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || 'toilamanhdevhust',
-      database: process.env.DB_NAME || 'website_lich_su',
+      database: process.env.DB_NAME || 'vietsuquan',
     });
 
     console.log('✅ Đang kết nối database...\n');

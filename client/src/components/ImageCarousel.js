@@ -73,31 +73,25 @@ const ImageCarousel = () => {
             onError={(e) => handleImageError(e)}
           />
         )}
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60"></div>
       </div>
 
-      {/* Text Overlay - Beige background on top, photo below */}
-      <div className="absolute inset-0 z-10">
-        {/* Beige overlay section (top 60-70%) */}
+      {/* Text Overlay - No background overlay, text with shadow for readability */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
         {slides.length > 0 && (
-          <div className="absolute top-0 left-0 right-0 h-[60%] sm:h-[65%] md:h-[70%] bg-gradient-to-b from-amber-50 via-amber-50/95 to-transparent flex items-center justify-center px-4 sm:px-6 md:px-8">
-            <div className="text-center max-w-4xl w-full">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary mb-4 md:mb-6 leading-tight uppercase tracking-tight">
-                <div 
-                  className="prose prose-lg prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ 
-                    __html: slides[currentSlide].quote || '' 
-                  }}
-                />
-              </h2>
-              <p className="text-lg sm:text-xl md:text-2xl text-primary font-semibold">
-                {slides[currentSlide].author || 'Thiên Sử Ký'}
-              </p>
-            </div>
+          <div className="text-center max-w-4xl w-full px-4 sm:px-6 md:px-8">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight uppercase tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              <div 
+                className="prose prose-lg prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ 
+                  __html: slides[currentSlide].quote || '' 
+                }}
+              />
+            </h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-white font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+              {slides[currentSlide].author || 'Thiên Sử Ký'}
+            </p>
           </div>
         )}
-        {/* Photo shows through bottom part */}
       </div>
 
       {/* Navigation Arrows */}

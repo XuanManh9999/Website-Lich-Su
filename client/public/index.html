@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="vi">
+
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.png" />
+  <!-- Favicon (tab icon) nên dùng 16x16/32x32 riêng để không bị “nát” khi thu nhỏ -->
+  <!-- NOTE: Thêm ?v=20260202-3 để tránh cache favicon/manifest quá lâu -->
+  <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico?v=20260202-3" />
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png?v=20260202-3" />
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png?v=20260202-3" />
+
+  <!-- App icons (PWA / iOS add-to-home) dùng ảnh lớn -->
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/logo-favicon.png?v=20260202-3" />
+  <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.png?v=20260202-3" />
+  <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.png?v=20260202-3" />
+
+  <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/favicon-32x32.png?v=20260202-3" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Theme colors - Màu chủ đạo đỏ -->
     <meta name="theme-color" content="#8F1A1E" />
+  <meta name="msapplication-TileColor" content="#8F1A1E" />
+  <meta name="msapplication-TileImage" content="%PUBLIC_URL%/android-chrome-192x192.png?v=20260202-3" />
+  <meta name="msapplication-navbutton-color" content="#8F1A1E" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Việt Sử Quân - Lịch Sử Việt Nam" />
+  <meta property="og:description"
+    content="Việt Sử Quân - Khám phá lịch sử Việt Nam qua các nhân vật anh hùng dân tộc" />
+  <meta property="og:image" content="%PUBLIC_URL%/logo.png?v=20260202-2" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Việt Sử Quân - Lịch Sử Việt Nam" />
+  <meta name="twitter:description"
+    content="Việt Sử Quân - Khám phá lịch sử Việt Nam qua các nhân vật anh hùng dân tộc" />
+  <meta name="twitter:image" content="%PUBLIC_URL%/logo.png?v=20260202-2" />
+
     <meta name="description" content="Việt Sử Quân - Khám phá lịch sử Việt Nam qua các nhân vật anh hùng dân tộc" />
     <title>Việt Sử Quân - Lịch Sử Việt Nam</title>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
+
 </html>

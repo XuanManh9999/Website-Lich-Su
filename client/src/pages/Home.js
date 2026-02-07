@@ -26,7 +26,7 @@ const Home = () => {
                 <span className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight">
                   Khám phá
                 </span>
-                <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-white">
+                <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight" style={{ color: '#FFD700' }}>
                   Lịch sử Việt Nam
                 </span>
               </h1>

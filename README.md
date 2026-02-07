@@ -26,7 +26,7 @@ Tạo file `.env` trong thư mục `server/`:
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
-DB_NAME=website_lich_su
+DB_NAME=vietsuquan
 JWT_SECRET=your_secret_key_here
 PORT=5000
 

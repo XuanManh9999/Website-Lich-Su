@@ -121,12 +121,18 @@ export const productAPI = {
 };
 
 export const quizAPI = {
-  getAll: (characterId) =>
-    api.get("/quiz", { params: characterId ? { character_id: characterId } : {} }),
+  getAll: (params) => api.get("/quiz", { params }),
   getById: (id) => api.get(`/quiz/${id}`),
   create: (data) => api.post("/quiz", data),
   update: (id, data) => api.put(`/quiz/${id}`, data),
   delete: (id) => api.delete(`/quiz/${id}`),
+};
+
+export const quizCategoryAPI = {
+  getAll: () => api.get("/quiz/categories"),
+  create: (data) => api.post("/quiz/categories", data),
+  update: (id, data) => api.put(`/quiz/categories/${id}`, data),
+  delete: (id) => api.delete(`/quiz/categories/${id}`),
 };
 
 export const chatbotAPI = {

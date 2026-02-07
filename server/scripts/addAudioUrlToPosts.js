@@ -8,7 +8,7 @@ async function addAudioUrlColumn() {
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'website_lich_su',
+      database: process.env.DB_NAME || 'vietsuquan',
     });
 
     console.log('Đang thêm cột audio_url vào bảng posts...');
@@ -20,7 +20,7 @@ async function addAudioUrlColumn() {
        WHERE TABLE_SCHEMA = ? 
        AND TABLE_NAME = 'posts' 
        AND COLUMN_NAME = 'audio_url'`,
-      [process.env.DB_NAME || 'website_lich_su']
+      [process.env.DB_NAME || 'vietsuquan']
     );
 
     if (columns.length > 0) {

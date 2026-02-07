@@ -24,12 +24,12 @@ node server/scripts/addAudioUrlToPosts.js
 - `DB_HOST`
 - `DB_USER`
 - `DB_PASSWORD`
-- `DB_NAME` (thường là `website_lich_su`)
+- `DB_NAME` (thường là `vietsuquan`)
 
 ### Cách 3: Chạy file SQL
 
 ```bash
-mysql -u root -p website_lich_su < server/scripts/add_audio_url_column.sql
+mysql -u root -p vietsuquan < server/scripts/add_audio_url_column.sql
 ```
 
 ## Kiểm tra kết quả
@@ -45,7 +45,7 @@ Hoặc:
 ```sql
 SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE 
 FROM INFORMATION_SCHEMA.COLUMNS 
-WHERE TABLE_SCHEMA = 'website_lich_su' 
+WHERE TABLE_SCHEMA = 'vietsuquan' 
 AND TABLE_NAME = 'posts' 
 AND COLUMN_NAME = 'audio_url';
 ```

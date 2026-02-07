@@ -9,7 +9,7 @@ async function addPaymentTable() {
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'website_lich_su',
+      database: process.env.DB_NAME || 'vietsuquan',
     });
 
     console.log('Đang thêm bảng payments và cập nhật bảng orders...');
@@ -23,7 +23,7 @@ async function addPaymentTable() {
         WHERE TABLE_SCHEMA = ? 
         AND TABLE_NAME = 'orders' 
         AND COLUMN_NAME = 'payment_status'
-      `, [process.env.DB_NAME || 'website_lich_su']);
+      `, [process.env.DB_NAME || 'vietsuquan']);
       
       if (columns.length === 0) {
         await connection.query(`

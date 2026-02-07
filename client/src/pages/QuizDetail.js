@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { quizAPI } from '../services/api';
+import { quizAPI, quizCategoryAPI } from '../services/api';
 
 const QuizDetail = () => {
   const { id } = useParams();
@@ -25,23 +25,48 @@ const QuizDetail = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await quizAPI.getAll();
+        // id is now category_id
+        const categoryId = id;
+        const response = await quizAPI.getAll({ category_id: categoryId });
         const allQuestions = response.data || [];
         
-        // For now, use first 5 questions or all available
-        const quizQuestions = allQuestions.slice(0, Math.min(5, allQuestions.length));
-        setQuestions(quizQuestions);
+        // Use all questions from this category
+        setQuestions(allQuestions);
         
-        // Update quiz info
-        if (quizQuestions.length > 0) {
+        // Fetch category info
+        try {
+          const categoryResponse = await quizCategoryAPI.getAll();
+          const categories = categoryResponse.data || [];
+          const category = categories.find(c => c.id === parseInt(categoryId));
+          
+          if (category) {
+            setQuizInfo({
+              title: category.name,
+              description: category.description || 'Câu hỏi trắc nghiệm về ' + category.name,
+              cardCount: allQuestions.length,
+              learningTime: Math.ceil(allQuestions.length * 2),
+              difficulty: 'Dễ',
+            });
+          } else {
+            setQuizInfo({
+              title: 'Quiz Trắc Nghiệm',
+              description: 'Câu hỏi tổng hợp',
+              cardCount: allQuestions.length,
+              learningTime: Math.ceil(allQuestions.length * 2),
+              difficulty: 'Dễ',
+            });
+          }
+        } catch (err) {
+          // Fallback if category API fails
           setQuizInfo({
-            title: 'Mini test',
-            description: 'Câu hỏi tổng hợp về lịch sử Việt Nam giai đoạn kháng chiến chống Pháp',
-            cardCount: quizQuestions.length,
-            learningTime: Math.ceil(quizQuestions.length * 2),
+            title: 'Quiz Trắc Nghiệm',
+            description: 'Câu hỏi tổng hợp',
+            cardCount: allQuestions.length,
+            learningTime: Math.ceil(allQuestions.length * 2),
             difficulty: 'Dễ',
           });
         }
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching questions:', error);
